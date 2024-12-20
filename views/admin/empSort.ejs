@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>NEXUS ID</title>
+    <style>
+        .main-content {
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+            border: 0.5px solid rgb(199, 196, 196, 0.2);
+            height: auto;
+            background-color: white;
+        }
+        input[type="text"] {
+            cursor: auto;
+        }
+        .totalRecords {
+            font-weight: 500;
+            color: green;
+        }
+        button {
+            color: black;
+        }
+        
+        table th {
+            background-color: #4a7b58;
+            color: white;
+        }
+        th i.fas {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="head-nav" style="margin-top: 0;">
+                <div class="nav" style="justify-content: flex-start; width: 100%;">               
+                    <div class="pnav" style="align-items: flex-start;">
+                    <a href="#" id="userIcon" class="userIcon" style=" border: 1px solid gray; border-radius: 50%; box-shadow: none;">
+                        <img src="<%= employeeData.userPhoto ? employeeData.userPhoto : '/images/profileX.jpg' %>" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                    </a>
+                    </div>
+                    <div class="snav">
+                        <% if (employeeData) { %>
+                            <% if (employeeData.role === 'Admin') { %>
+                                <p2>Welcome Admin <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else if (employeeData.role === 'HR') { %>
+                                <p2>Welcome HR <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else { %>
+                                <p2>Welcome <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } %>
+                        <% } else { %>
+                            <p2>Welcome Guest!</p2>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="side-nav">
+                <a href="/admin/notif" class="notif" style="position: relative; border: 0.5px solid lightgray;">
+                <i class="fas fa-bell"></i>
+                <% if (pendingCount > 0) { %>
+                    <span id="badge" class="badge"><%= pendingCount %></span>
+                <% } %>
+                Notification
+            </a>
+                    <a href="/admin/ann" class="ann" style="position: relative; border: 0.5px solid lightgray;">
+                        <i class="fas fa-circle-exclamation"></i> Announcements
+                    </a>
+                    <hr>
+                    <a href="/admin/das" class="das"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                    <a href="/admin/emp" class="active"><i class="fas fa-user-tie"></i> Employees</a>
+                    <a href="/admin/dig" class="dig"><i class="fas fa-address-card"></i> My Digital ID</a>
+                    <a href="/admin/dir" class="dir"><i class="fa-solid fa-address-book"></i> Directory</a>
+                    <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>
+            
+
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+        </div>
+
+        <div class="main-frame">
+            <div class="sub">
+                <div class="ctrl left">
+                    <a href="/admin/emp" class="pbtn"><i class="fa-solid fa-chevron-left"></i>Go Back</a>
+                    <span style="border-left: 1px solid black; padding: 2px 0;"> &nbsp; To sort the table, click on each table header</span>
+                </div>
+                <div class="ctrl right">
+                    <span id="totalRecords" class="totalRecords" style="border-right: 1px solid black; padding: 2px 5px;"></span>
+                    <a href="/admin/empSort" class="pbtn"><i class="fa-solid fa-arrows-rotate"></i>Refresh</a>
+                </div>
+            </div>
+            <div class="main-content">
+                <table id="employeeTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)"><i class="fas fa-id-card"></i>ID</th>
+                        <th onclick="sortTable(1)"><i class="fas fa-user"></i>Name</th>
+                        <th onclick="sortTable(2)"><i class="fas fa-briefcase"></i>Type</th>
+                        <th onclick="sortTable(3)"><i class="fas fa-user-tie"></i>Position</th>
+                        <th onclick="sortTable(4)"><i class="fas fa-building"></i>Office</th>
+                        <th onclick="sortTable(5)" style="width: 10%; text-align: center;"><i class="fas fa-cog"></i>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% employees.forEach(employee => { %>
+                        <tr>
+                            <td><%= employee.userId %></td>
+                            <td><%= employee.lastName %> <%= employee.extName %>, <%= employee.firstName %> <%= employee.middleName %></td>
+                            <td><%= employee.type %></td>
+                            <td><%= employee.position %></td>
+                            <td><%= employee.office %></td>
+                            <td>
+                                <center>
+                                    <a href="viewEmp/<%= employee.id %>"><i class="bi bi-eye" style="color: green;"></i></a>
+                                    <% if (user.role === 'Admin') { %>
+                                        <a href="idUser/<%= employee.id %>"><i class="bi bi-printer icon" style="color: green;"></i></a>
+                                    <% } %>
+                            </center>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const employeeTable = document.getElementById("employeeTable");
+            const totalRecordsLabel = document.getElementById("totalRecords");
+    
+            function updateTotalRecords() {
+                const totalRecords = employeeTable.getElementsByTagName("tbody")[0].rows.length;
+                totalRecordsLabel.innerText = `Total Records: ${totalRecords}`;
+            }
+    
+            function sortTable(columnIndex) {
+                const tableBody = employeeTable.getElementsByTagName("tbody")[0];
+                const rows = Array.from(tableBody.rows);
+                const isAscending = tableBody.getAttribute("data-sort-order") === "asc";
+    
+                rows.sort((a, b) => {
+                    const cellA = a.cells[columnIndex].innerText.toLowerCase();
+                    const cellB = b.cells[columnIndex].innerText.toLowerCase();
+    
+                    if (cellA < cellB) {
+                        return isAscending ? -1 : 1;
+                    }
+                    if (cellA > cellB) {
+                        return isAscending ? 1 : -1;
+                    }
+                    return 0;
+                });
+    
+                rows.forEach(row => tableBody.appendChild(row)); // Reattach rows in sorted order
+                tableBody.setAttribute("data-sort-order", isAscending ? "desc" : "asc"); // Toggle sort order
+                updateTotalRecords(); // Update total records display
+            }
+    
+            // Initial update for total records
+            updateTotalRecords();
+            
+            // Attach click event listeners to header cells for sorting
+            const headerCells = employeeTable.getElementsByTagName("th");
+            for (let i = 0; i < headerCells.length; i++) {
+                headerCells[i].addEventListener("click", () => sortTable(i));
+            }
+        });
+    </script>
+    
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+    <script src="script.js"></script>
+    
+</body>
+</html>

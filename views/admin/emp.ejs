@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>NEXUS ID</title>
+    <style>
+        .main-frame {
+            position: relative;
+        }
+        .main-content {
+            overflow: hidden;
+            padding: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+            border: 0.5px solid rgb(199, 196, 196, 0.2);
+            height: auto;
+            background-color: white;
+        }
+        input[type="text"] {
+            cursor: auto;
+        }
+        .totalRecords {
+            font-weight: 500;
+            color: green
+        }
+        button {
+            color: rgb(193, 193, 193);
+        }
+        table th {
+            background-color: #4a7b58;
+            color: white;
+        }
+        th i.fas {
+            color: white;
+        }
+        .ctrl.right a:hover, .ctrl button:hover, .ctrl.left a:hover {
+            transform: scale(1.06);
+            transition: all 0.8s ease; /* Smooth transition */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="head-nav" style="margin-top: 0;">
+                <div class="nav" style="justify-content: flex-start; width: 100%;">               
+                    <div class="pnav" style="align-items: flex-start;">
+                    <a href="#" id="userIcon" class="userIcon" style=" border: 1px solid gray; border-radius: 50%; box-shadow: none;"><img src="<%= employeeData && employeeData.userPhoto ? employeeData.userPhoto : '/images/profileX.jpg' %>" 
+                        onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">                    
+                    </a>
+                    </div>
+                    <div class="snav">
+                        <% if (employeeData) { %>
+                            <% if (employeeData.role === 'Admin') { %>
+                                <p2>Welcome Admin <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else if (employeeData.role === 'HR') { %>
+                                <p2>Welcome HR <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else { %>
+                                <p2>Welcome <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } %>
+                        <% } else { %>
+                            <p2>Welcome Guest!</p2>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="side-nav">
+                <a href="/admin/notif" class="notif" style="position: relative; border: 0.5px solid lightgray;">
+                <i class="fas fa-bell"></i>
+                <% if (pendingCount > 0) { %>
+                    <span id="badge" class="badge"><%= pendingCount %></span>
+                <% } %>
+                Notification
+            </a>
+                    <a href="/admin/ann" class="ann" style="position: relative; border: 0.5px solid lightgray;">
+                        <i class="fas fa-circle-exclamation"></i> Announcements
+                    </a>
+                    <hr>
+                    <a href="/admin/das" class="das"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                    <a href="/admin/emp" class="active"><i class="fas fa-user-tie"></i> Employees</a>
+                    <a href="/admin/dig" class="dig"><i class="fas fa-address-card"></i> My Digital ID</a>
+                    <a href="/admin/dir" class="dir"><i class="fa-solid fa-address-book"></i> Directory</a>
+                    <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>
+            
+
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+        </div>
+
+        <div class="main-frame">
+
+            <div class="sub">
+                <div class="ctrl left">
+                    <ph>Employee Management</ph>
+                </div>
+                <div class="ctrl right">
+                    <a href="/admin/export" id="exportButton" class="pbtn"><i class="fas fa-download"></i> Export Record</a>
+                    <% if (user.role === 'HR') { %>
+                        | 
+                        <a href="#" id="newEmpIcon" class="sbtn"><i class="fas fa-user-plus"></i>Add Employee</a>
+                        <% } %>
+                </div>
+            </div>
+            <div class="sub">
+                <div class="ctrl left">
+                    <a href="/admin/empSort" class="pbtn"><i class="fas fa-sort" style="color: green;"></i>Sort Table</a>
+                    <a href="/admin/empArch" class="pbtn"><i class="fas fa-archive" style="color: inherit;"></i>Archives</a>
+                </div>
+                <div class="ctrl right">
+                    <input type="text" id="univ" placeholder="Search employee or employee's info .." oninput="searchTable()">
+                </div>
+            </div>
+
+                                <div class="createDiv" id="creatediv" style="display: none;">
+                                    <form class="createCard" id="createCard" action="/admin/create-account" method="POST">
+                                        <div class="formClose" id="formClose"><i class="fa-solid fa-xmark"></i></div>
+                                        <div class="formCard left">
+                                            <div class="row header">
+                                                <fh>CREATE ACCOUNT</fh>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Please fill out all the necessary information.</p>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <p1>Complete Name</p1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>First Name</p>
+                                                    <input type="text" name="firstName" required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Middle Name</p>
+                                                    <input type="text" name="middleName">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Last Name</p>
+                                                    <input type="text" name="lastName" required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field tiny">
+                                                    <p>Extension</p>
+                                                    <input type="text" name="extName" placeholder="e.g. Jr., II">
+                                                </div>
+                                                <div class="field medium">
+                                                    <p>Gender</p>
+                                                    <select name="gender">
+                                                        <option disabled selected>--Select--</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br><hr><br>
+                                            <div class="row">
+                                                <p1>Contact Info</p1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Email Address</p>
+                                                    <input type="email" name="email" placeholder="e.g. juan.delacruz@gmail.com" required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Birthday</p>
+                                                    <input type="date" name="birthday">
+                                                </div>
+                                                <div class="field">
+                                                    <p>Phone Number</p>
+                                                    <input type="text" name="phone">
+                                                </div>
+                                            </div>
+                                        </div>
+                                
+                                        <div class="formCard right">
+                                        <span id="userIdMessage" style="font-size: 12px; font-weight: bold; color: green;"></span>
+                                        <br>
+                                            <div class="row">
+                                                <p1>Job Description</p1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>User ID</p>
+                                                    <input type="text" name="userId" required>
+                                                </div>
+                                                <div class="field short">
+                                                    <p>Type</p>
+                                                    <select name="type" required>
+                                                        <option value="" disabled selected>--Select Type--</option>
+                                                        <option value="Elected">Elected</option>
+                                                        <option value="Casual">Casual</option>
+                                                        <option value="Co-Term">Co-Term</option>
+                                                        <option value="Job Order">Job Order</option>
+                                                        <option value="Permanent">Permanent</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Office</p>
+                                                    <select name="office" required>
+                                                        <option value="" disabled selected>--Select Office--</option>
+                                                        <option value="City Administrator’s Office">City Administrator’s Office</option>
+                                                        <option value="City Accounting Office">City Accounting Office</option>
+                                                        <option value="City Agriculture Office">City Agriculture Office</option>
+                                                        <option value="City Assessor’s Office">City Assessor’s Office</option>
+                                                        <option value="City Budget Office">City Budget Office</option>
+                                                        <option value="City Business Permit and Licensing Office">City Business Permit and Licensing Office</option>
+                                                        <option value="City Civil Registrar’s Office">City Civil Registrar’s Office</option>
+                                                        <option value="City Cooperative Development Office and Allied Services">City Cooperative Development Office and Allied Services</option>
+                                                        <option value="City Disaster Risk Reduction and Management Office">City Disaster Risk Reduction and Management Office</option>
+                                                        <option value="City Economic Enterprise Management Office">City Economic Enterprise Management Office</option>
+                                                        <option value="City Engineering Office">City Engineering Office</option>
+                                                        <option value="City Environment and Natural Resources Office">City Environment and Natural Resources Office</option>
+                                                        <option value="City General Services Office">City General Services Office</option>
+                                                        <option value="City Health Office">City Health Office</option>
+                                                        <option value="City Human Resource Management Office">City Human Resource Management Office</option>
+                                                        <option value="City Information Office">City Information Office</option>
+                                                        <option value="City Library">City Library</option>
+                                                        <option value="City Motor Pool">City Motor Pool</option>
+                                                        <option value="City Planning and Development Office">City Planning and Development Office</option>
+                                                        <option value="City Population Office">City Population Office</option>
+                                                        <option value="City Public Employment Service Office">City Public Employment Service Office</option>
+                                                        <option value="City Public Order and Safety Office">City Public Order and Safety Office</option>
+                                                        <option value="City Social Welfare and Development Office">City Social Welfare and Development Office</option>
+                                                        <option value="City Tourism Office">City Tourism Office</option>
+                                                        <option value="City Traffic Management Unit">City Traffic Management Unit</option>
+                                                        <option value="City Treasurer’s Office">City Treasurer’s Office</option>
+                                                        <option value="City Veterinary Office">City Veterinary Office</option>
+                                                        <option value="Community Affairs Office">Community Affairs Office</option>
+                                                        <option value="Local Economic Investment and Promotion Office">Local Economic Investment and Promotion Office</option>
+                                                        <option value="Local Youth Development Office">Local Youth Development Office</option>
+                                                        <option value="Ospital ng Lungsod Agham ng Muñoz (OsLAM)">Ospital ng Lungsod Agham ng Muñoz (OsLAM)</option>
+                                                        <option value="Sangguniang Panlungsod">Sangguniang Panlungsod</option>
+                                                        <option value="Office of the City Mayor">Office of the City Mayor</option>
+                                                        <option value="Office of the City Vice Mayor">Office of the City Vice Mayor</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Position</p>
+                                                    <input type="text" name="position" required>
+                                                </div>
+                                            </div>
+                                            <br><hr><br>
+                                            <div class="row">
+                                                <p1>Account Info</p1>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field">
+                                                    <p>Username</p>
+                                                    <input type="text" name="username" required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field" style="position: relative">
+                                                    <p>Create Password</p>
+                                                    <input type="password" name="password" id="new-password" required>
+                                                    <span class="toggle-password" onclick="togglePassword('new-password')"><i class="fa-solid fa-eye"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="field" style="position: relative">
+                                                    <p>Confirm Password</p>
+                                                    <input type="password" name="confirmPassword" id="confirm-password" required>
+                                                    <span class="toggle-password" onclick="togglePassword('confirm-password')"><i class="fa-solid fa-eye"></i></span>
+                                                </div>
+                                            </div>
+                                            <br><br>
+                                            <div class="row">
+                                                <p>Check and verify information before you submit the form.</p>
+                                            </div>
+                                            <br>
+                                            <div class="row ctrl">
+                                                <button type="reset" id="reset" class="s">Clear Form</button>
+                                                <button type="submit" id="submit"><i class="fa-solid fa-plus"></i>Create</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+
+            <div class="main-content" style="justify-content: flex-start;">
+                <table id="employeeTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)"><i class="fas fa-id-card"></i>ID</th>
+                        <th onclick="sortTable(1)"><i class="fas fa-user"></i>Name</th>
+                        <th onclick="sortTable(2)"><i class="fas fa-briefcase"></i>Type</th>
+                        <th onclick="sortTable(3)"><i class="fas fa-user-tie"></i>Position</th>
+                        <th onclick="sortTable(4)"><i class="fas fa-building"></i>Office</th>
+                        <th onclick="sortTable(5)" style="width: 10%; text-align: center;"><i class="fas fa-cog"></i>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% employees.forEach(employee => { %>
+                        <tr>
+                            <td><%= employee.userId %></td>
+                            <td style="font-weight: 500;"><%= employee.lastName %> <%= employee.extName %>, <%= employee.firstName %> <%= employee.middleName %></td>
+                            <td><%= employee.type %></td>
+                            <td><%= employee.position %></td>
+                            <td><%= employee.office %></td>
+                            <td>
+                                <center>
+                                <a href="viewEmp/<%= employee.id %>"><i class="bi bi-eye" style="color: green;" id="editA"></i></a>
+                                <% if (user.role === 'Admin') { %>
+                                    <a href="idUser/<%= employee.id %>"><i class="bi bi-printer icon" style="color: green;"></i></a>
+                                <% } %>
+                            </center>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+
+            
+            <div class="sub" style="width: 100%;">
+                <div class="ctrl right" style="width: 100%;">
+                    <span id="totalRecords" class="totalRecords"></span> | Display Per Page: 
+                    <select id="rowsPerPage" onchange="updateRowsPerPage()">
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+            
+            </div>
+            
+
+        </div>
+    </div>
+    <script>// Function to handle form submission with AJAX and check for duplicate userId
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent the default form submission
+        
+            const formData = new FormData(document.getElementById('createCard'));
+            const formObject = Object.fromEntries(formData.entries());
+        
+            // Send AJAX request to create the account
+            fetch('/admin/create-account', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formObject),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // If response is not OK, it means there's an error (e.g., userId already exists)
+                    return response.text().then(errorMessage => {
+                        alert(errorMessage); // Show the error message to the user
+                    });
+                }
+        
+                // If successful, show success message or redirect
+                window.location.href = '/admin/createEmpSuccess'; // Redirect to the success page
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An unexpected error occurred. Please try again.');
+            });
+        }
+        
+        // Attach the handleFormSubmit function to the form submit event
+        document.getElementById('createCard').addEventListener('submit', handleFormSubmit);
+        
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const employeeTable = document.getElementById("employeeTable");
+        const paginationContainer = document.getElementById("pagination");
+        const rowsPerPageSelect = document.getElementById("rowsPerPage");
+        const totalRecordsLabel = document.getElementById("totalRecords");
+        const searchInput = document.getElementById("univ");
+        
+        let currentPage = 1;
+        let rowsPerPage = 10; // Default rows per page
+        let allRows = Array.from(employeeTable.getElementsByTagName("tbody")[0].rows);
+        let filteredRows = allRows; // Start with all rows
+    
+        // Function to render the table based on the current page
+        function renderTable() {
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+    
+            // Hide all rows
+            for (let row of allRows) {
+                row.style.display = "none";
+            }
+    
+            // Show only the rows for the current page
+            for (let i = start; i < end && i < filteredRows.length; i++) {
+                filteredRows[i].style.display = ""; // Display matching rows
+            }
+    
+            // Update total records label
+            totalRecordsLabel.innerText = `Total Records: ${filteredRows.length}`;
+            renderPagination(filteredRows.length);
+        }
+    
+        // Function to render pagination buttons
+        function renderPagination(totalRows) {
+            paginationContainer.innerHTML = ""; // Clear previous pagination
+    
+            // Disable pagination when searching
+            if (searchInput.value) {
+                return; // Do not render pagination if searching
+            }
+    
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+    
+            // Create previous button
+            const prevButton = document.createElement("button");
+            prevButton.innerHTML = "« Previous";
+            prevButton.disabled = currentPage === 1;
+            prevButton.onclick = () => {
+                currentPage--;
+                renderTable();
+            };
+            paginationContainer.appendChild(prevButton);
+    
+            // Create page number buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.innerHTML = i;
+                pageButton.className = (i === currentPage) ? "active" : "";
+                pageButton.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                paginationContainer.appendChild(pageButton);
+            }
+    
+            // Create next button
+            const nextButton = document.createElement("button");
+            nextButton.innerHTML = "Next »";
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.onclick = () => {
+                currentPage++;
+                renderTable();
+            };
+            paginationContainer.appendChild(nextButton);
+        }
+    
+        // Update rows per page
+        function updateRowsPerPage() {
+            rowsPerPage = parseInt(rowsPerPageSelect.value);
+            currentPage = 1; // Reset to first page
+            renderTable();
+        }
+    
+        // Search function
+        function searchTable() {
+            const query = searchInput.value.toLowerCase();
+            filteredRows = allRows.filter(row => {
+                return Array.from(row.cells).some(cell => {
+                    return cell.textContent.toLowerCase().includes(query);
+                });
+            });
+    
+            // Reset pagination and display filtered results
+            currentPage = 1; // Reset to first page on search
+            rowsPerPageSelect.style.display = query ? "none" : "block"; // Hide/show dropdown based on query
+            renderTable();
+        }
+    
+        // Initial render
+        rowsPerPageSelect.addEventListener("change", updateRowsPerPage);
+        searchInput.addEventListener("input", searchTable); // Attach search input event
+        renderTable(); // Show all rows by default
+    });    
+</script>
+<script>
+    const createDiv = document.querySelector('.createDiv');
+
+document.getElementById('newEmpIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+
+    if (createDiv.style.display === 'none' || createDiv.style.display === '') {
+        createDiv.style.display = 'flex'; // Show the div
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        createDiv.style.display = 'none'; // Hide the div
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Close the div when clicking the close icon
+document.getElementById('formClose').addEventListener('click', function(event) {
+    createDiv.style.display = 'none'; // Hide the div
+    document.getElementById('newEmpIcon').classList.remove('user-icon-active'); // Remove active class
+});
+
+// Optional: Close the div when clicking outside
+document.addEventListener('click', (event) => {
+    if (!event.target.closest('#newEmpIcon') && !createDiv.contains(event.target)) {
+        createDiv.style.display = 'none'; // Hide the div
+        document.getElementById('newEmpIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+<script>
+    document.getElementById('phoneIcon').addEventListener('click', function(event) { 
+    event.preventDefault(); // Prevent the default link behavior
+    const infoNav = document.querySelector('.info-nav');
+
+    // Get the position of the icon
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 5; // Distance below the icon
+
+    // Toggle display of infoNav
+    if (infoNav.style.display === 'none' || infoNav.style.display === '') {
+        infoNav.style.display = 'flex'; // Show the info-nav
+        this.classList.add('phone-icon-active'); // Add active class
+
+        // Set the position of infoNav
+        infoNav.style.right = '8px'; // Align to the right edge of the viewport
+        infoNav.style.top = `${rect.bottom + distanceBelow}px`; // Position 5px below the icon
+    } else {
+        infoNav.style.display = 'none'; // Hide the info-nav
+        this.classList.remove('phone-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const infoNav = document.querySelector('.info-nav');
+    if (!event.target.closest('#phoneIcon') && !infoNav.contains(event.target)) {
+        infoNav.style.display = 'none'; // Hide the info-nav
+        document.getElementById('phoneIcon').classList.remove('phone-icon-active'); // Remove active class
+    }
+});
+</script>
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+<script>
+    function togglePassword(inputId) {
+        const inputField = document.getElementById(inputId);
+        const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+        inputField.setAttribute('type', type);
+    }
+</script>
+    
+<script src="script.js"></script>  
+</body>
+</html>

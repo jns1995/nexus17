@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <title>NEXUS ID</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(149, 182, 119, 0.9);
+        }
+        .createCard {
+            width: 60%;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form class="createCard" id="createCard" action="/admin/createAccount" method="POST">
+            <div class="formClose" id="formClose"><i class="fa-solid fa-xmark"></i></div>
+            <div class="formCard left">
+                <div class="row header">
+                    <fh>Unlock Your Account</fh>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <p>Please fill out all the necessary information.</p>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <p1>Complete Name</p1>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>First Name</label>
+                        <!-- Pre-populate the field with the value from req.body.firstName -->
+                        <input type="text" name="firstName" value="<%= users.firstName || '' %>" required placeholder="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Middle Name</label>
+                        <!-- Pre-populate the field with the value from req.body.middleName -->
+                        <input type="text" name="middleName" value="<%= users.middleName || '' %>" placeholder="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Last Name</label>
+                        <!-- Pre-populate the field with the value from req.body.lastName -->
+                        <input type="text" name="lastName" value="<%= users.lastName || '' %>" required placeholder="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="field tiny">
+                        <label>Extension</label>
+                        <!-- Pre-populate the field with the value from req.body.extName -->
+                        <input type="text" name="extName" value="<%= users.extName || '' %>" placeholder="e.g. Jr., II">
+                    </div>
+                    <div class="field short">
+                        <label>Gender</label>
+                        <select name="gender" required>
+                            <option value="" <% if (!users.gender) { %>selected<% } %>>--Select--</option>
+                            <option value="Male" <% if (users.gender === 'Male') { %>selected<% } %>>Male</option>
+                            <option value="Female" <% if (users.gender === 'Female') { %>selected<% } %>>Female</option>
+                        </select>
+                    </div>
+                </div>
+                <br><hr><br>
+                <div class="row">
+                    <p1>Contact Info</p1>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Email Address</label>
+                        <input type="email" name="email"  value="<%= users.email || '' %>" required placeholder="e.g. juan.delacruz@gmail.com">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Birthday</label>
+                        <input type="date"  value="<%= users.birthday || '' %>" name="birthday">
+                    </div>
+                    <div class="field">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone"  value="<%= users.phone || '' %>"  required placeholder="e.g. 09123456789">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="formCard right">
+                <div class="row">
+                    <p1>Job Description</p1>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Position</label>
+                        <!-- Pre-populate the field with the value from req.body.position -->
+                        <input type="text" name="position" value="<%= users.position || '' %>" required placeholder="">
+                    </div>
+                    <div class="field short">
+                        <label>Type</label>
+                        <select name="type" required>
+                            <option value="" <% if (!users.type) { %>selected<% } %>>--Select Type--</option>
+                            <option value="Elected" <% if (users.type === 'Elected') { %>selected<% } %>>Elected</option>
+                            <option value="Casual" <% if (users.type === 'Casual') { %>selected<% } %>>Casual</option>
+                            <option value="Co-Term" <% if (users.type === 'Co-Term') { %>selected<% } %>>Co-term</option>
+                            <option value="Job Order" <% if (users.type === 'Job Order') { %>selected<% } %>>Job Order</option>
+                            <option value="Permanent" <% if (users.type === 'Permanent') { %>selected<% } %>>Permanent</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Office</label>
+                        <select name="office" required>
+                            <option value="" disabled selected>--Select Office--</option>
+                            <option value="City Administrator’s Office">City Administrator’s Office</option>
+                            <option value="City Accounting Office">City Accounting Office</option>
+                            <option value="City Agriculture Office">City Agriculture Office</option>
+                            <option value="City Assessor’s Office">City Assessor’s Office</option>
+                            <option value="City Budget Office">City Budget Office</option>
+                            <option value="City Business Permit and Licensing Office">City Business Permit and Licensing Office</option>
+                            <option value="City Civil Registrar’s Office">City Civil Registrar’s Office</option>
+                            <option value="City Cooperative Development Office and Allied Services">City Cooperative Development Office and Allied Services</option>
+                            <option value="City Disaster Risk Reduction and Management Office">City Disaster Risk Reduction and Management Office</option>
+                            <option value="City Economic Enterprise Management Office">City Economic Enterprise Management Office</option>
+                            <option value="City Engineering Office">City Engineering Office</option>
+                            <option value="City Environment and Natural Resources Office">City Environment and Natural Resources Office</option>
+                            <option value="City General Services Office">City General Services Office</option>
+                            <option value="City Health Office">City Health Office</option>
+                            <option value="City Human Resource Management Office">City Human Resource Management Office</option>
+                            <option value="City Information Office">City Information Office</option>
+                            <option value="City Library">City Library</option>
+                            <option value="City Motor Pool">City Motor Pool</option>
+                            <option value="City Planning and Development Office">City Planning and Development Office</option>
+                            <option value="City Population Office">City Population Office</option>
+                            <option value="City Public Employment Service Office">City Public Employment Service Office</option>
+                            <option value="City Public Order and Safety Office">City Public Order and Safety Office</option>
+                            <option value="City Social Welfare and Development Office">City Social Welfare and Development Office</option>
+                            <option value="City Tourism Office">City Tourism Office</option>
+                            <option value="City Traffic Management Unit">City Traffic Management Unit</option>
+                            <option value="City Treasurer’s Office">City Treasurer’s Office</option>
+                            <option value="City Veterinary Office">City Veterinary Office</option>
+                            <option value="Community Affairs Office">Community Affairs Office</option>
+                            <option value="Local Economic Investment and Promotion Office">Local Economic Investment and Promotion Office</option>
+                            <option value="Local Youth Development Office">Local Youth Development Office</option>
+                            <option value="Ospital ng Lungsod Agham ng Muñoz (OsLAM)">Ospital ng Lungsod Agham ng Muñoz (OsLAM)</option>
+                            <option value="Sangguniang Panlungsod">Sangguniang Panlungsod</option>
+                            <option value="Office of the City Mayor">Office of the City Mayor</option>
+                            <option value="Office of the City Vice Mayor">Office of the City Vice Mayor</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row">
+                    <p1>Login Account</p1>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label>Choose your username</label>
+                        <!-- Pre-populate the field with the value from req.body.username -->
+                        <input type="text" id="usernameInput" name="username" value="<%= users.username || '' %>" required>
+                        <% if (typeof error !== 'undefined' && error) { %>
+                            <span style="color: orangered; font-size: 12px;">
+                                <%= error %>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+                <br>
+                <div class="row ctrl" style="justify-content: flex-end;">
+                    <button type="reset" id="reset" class="s" style="cursor: pointer;">Clear Form</button>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row">
+                    <input type="checkbox" id="consent" name="consent" required>
+                    <label for="consent">
+                        I consent to the processing of my personal data in accordance with the 
+                        <a href="privacy-policy.html" target="_blank">Privacy Policy</a>. 
+                        I understand that I will receive an email containing my username and password once my information has been validated by the admin.
+                    </label>
+                </div>
+                <br>
+                <div class="row ctrl">
+                    <button type="submit" id="submit" style="max-width: 100%; font-size: 16px; border-radius: 8px; cursor: pointer;">
+                        Register
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+    </div>
+    
+<script>
+    document.getElementById('formClose').addEventListener('click', function() {
+        window.location.href = '/admin/welcome'; // Redirect to welcome.html
+    });
+</script>
+</body>
+</html>

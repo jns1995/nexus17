@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+    <title>NEXUS ID</title>
+    <style>
+        .main-content {
+            overflow: hidden;
+            padding-block: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+            border: 0.5px solid rgb(199, 196, 196, 0.2);
+            height: auto;
+            background-color: white;
+            justify-content: flex-start;
+        }
+        input[type="text"] {
+            cursor: auto;
+        }
+        .totalRecords {
+            font-weight: 500;
+            color: green
+        }
+        button {
+            color: black;
+
+        }
+        td a {
+            text-decoration: none;
+            color: black;
+        }
+        .main-frame.sub {
+            width: 20%;
+            height: auto;
+        }
+        .main-frame {
+            width: 65%;
+        }
+        table th {
+            background-color: #4a7b58;
+            color: white;
+        }
+        .eHot {
+            width: 90%;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            background-color: #2f4433;
+            color: white;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            height: auto;
+            position: relative;
+        }
+        .eHot a {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .eHot a i {
+            color: white;
+            font-weight: 200;
+        }
+        
+        .ctrl.right a:hover, .ctrl button:hover, .ctrl.left a:hover {
+            transform: scale(1.08);
+            transition: all 0.8s ease; /* Smooth transition */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="head-nav" style="margin-top: 0;">
+                <div class="nav" style="justify-content: flex-start; width: 100%;">               
+                    <div class="pnav" style="align-items: flex-start;">
+                    <a href="#" id="userIcon" class="userIcon" style=" border: 1px solid gray; border-radius: 50%; box-shadow: none;">
+                        <img src="<%= employeeData.userPhoto ? employeeData.userPhoto : '/images/profileX.jpg' %>" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                    </a>
+                    </div>
+                    <div class="snav">
+                        <% if (employeeData) { %>
+                            <% if (employeeData.role === 'Admin') { %>
+                                <p2>Welcome Admin <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else if (employeeData.role === 'HR') { %>
+                                <p2>Welcome HR <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else { %>
+                                <p2>Welcome <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } %>
+                        <% } else { %>
+                            <p2>Welcome Guest!</p2>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="side-nav">
+                
+                <% if (user.role === 'HR' || user.role === 'Admin') { %>
+                    <a href="/admin/notif" class="notif" style="position: relative; border: 0.5px solid lightgray;">
+                    <i class="fas fa-bell"></i>
+                    <% if (pendingCount > 0) { %>
+                        <span id="badge" class="badge"><%= pendingCount %></span>
+                    <% } %>
+                    Notification
+                </a>
+                    <% } %>
+                    <a href="/admin/ann" class="ann" style="position: relative; border: 0.5px solid lightgray;">
+                        <i class="fas fa-circle-exclamation"></i> Announcements
+                    </a>
+                    <hr>
+                    <% if (user.role === 'HR' || user.role === 'Admin') { %>
+                    <a href="/admin/das" class="das"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                    <a href="/admin/emp" class="emp"><i class="fas fa-user-tie"></i> Employees</a>
+                    <% } %>
+                    <a href="/admin/dig" class="dig"><i class="fas fa-address-card"></i> My Digital ID</a>
+                    <a href="/admin/dir" class="active"><i class="fa-solid fa-address-book"></i> Directory</a>
+                    <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>
+            
+
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+        </div>
+
+        
+        <div class="main-frame sub">
+            <div class="sub">
+                <div class="title" style="width: 100%;">
+                    <ph>Directory</ph>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <br>
+                <p1 style="display: flex; align-items: center;">
+                    <i class="fas fa-phone" style="color: white; font-size: 14px; background-color: #4a7b58; height: 20px; width: 20px; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 50%;"></i>
+                    Emergency Hotline
+                </p1>
+                <br>
+                <% ephone.forEach(function(phone) { %>
+                <div class="eHot">
+                    
+                        <% if (user.role === 'Admin') { %>
+                            <a href="editPhone/<%= phone.id %>">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        <% } %>
+                        <p1><%= phone.name %></p1>
+                        <hr>
+                        <p2><%= phone.item1 %></p2>
+                        <p2><%= phone.item2 %></p2>
+                        <p2><%= phone.item3 %></p2>
+                </div>
+                <br>
+                <% }); %>
+
+            </div>
+        </div>
+
+        <div class="main-frame">
+
+            <div class="sub">
+                <div class="ctrl right">
+                    <input type="text" id="univ" placeholder="Search contact.." oninput="searchTable()">
+                    |
+                    <a href="https://www.facebook.com/sciencecityofmunoz3119/" class="pbtn" target="_blank">
+                        <i class="fab fa-facebook-f" style="color: navy;"></i> SCM FB Page
+                    </a>
+                    <a href="https://sciencecityofmunoz.gov.ph/" class="pbtn" target="_blank">
+                        <i class="fas fa-globe" style="color: green;"></i> SCM Website
+                    </a>
+                    <a href="/admin/exportHotline" id="exportButton" class="sbtn"><i class="fas fa-download"></i> Export </a>
+                </div>
+            </div>
+            <div class="main-content">
+                <p1>Full Contact List</p1>
+                <table id="lguDir">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Office/Agency</th>
+                            <th style="width: 8%;" onclick="sortTable(1)">Contact</th>
+                            <th onclick="sortTable(2)">Email</th>
+                            <th onclick="sortTable(3)">Facebook/Website</th>
+                            <% if (user.role === 'Admin') { %>
+                            <th style="width: 5%; text-align: center;">
+                                Action
+                            </th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% hotline.forEach(hotline => { %>
+                        <tr>
+                            <td style="font-weight: 600;">
+                                <%= hotline.name %>
+                            </td>
+                            <td>
+                                <%= hotline.phone1 %>
+                                <br><%= hotline.phone2 %>
+                                <br><%= hotline.phone3 %>
+                            </td>
+                            <td><%= hotline.email %></td>
+                            <td><%= hotline.facebook %><br><%= hotline.website %></td>
+                            <% if (user.role === 'Admin') { %>
+                            <td>
+                                <center>
+                                <a href="editHotline/<%= hotline.id %>">
+                                    <i class="fas fa-edit" style="font-size: 16px; color: green;"></i>
+                                </a>
+                            </center>
+                            </td>
+                            <% } %>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+
+                
+                <span class="ctrl right" style="display: flex; justify-content: flex-end; align-items: center; width: 100%;">
+                    <span id="totalRecords" class="totalRecords"></span> |
+                      Display Per Page: 
+                    <select id="rowsPerPage" onchange="updateRowsPerPage()">
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <div class="pagination" id="pagination"></div>
+                </span>
+                
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const hotlineTable = document.getElementById("lguDir");
+            const paginationContainer = document.getElementById("pagination");
+            const rowsPerPageSelect = document.getElementById("rowsPerPage");
+            const totalRecordsLabel = document.getElementById("totalRecords");
+            const searchInput = document.getElementById("univ");
+    
+            let currentPage = 1;
+            let rowsPerPage = 10; // Default rows per page
+            let allRows = Array.from(hotlineTable.getElementsByTagName("tbody")[0].rows);
+            let filteredRows = allRows; // Initially all rows are shown
+    
+            // Function to render the table based on the current page
+            function renderTable() {
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+    
+                // Hide all rows initially
+                allRows.forEach(row => {
+                    row.style.display = "none";
+                });
+    
+                // Show only the rows for the current page from the filtered rows
+                for (let i = start; i < end && i < filteredRows.length; i++) {
+                    filteredRows[i].style.display = ""; // Show matching rows
+                }
+    
+                // Update the total records label to reflect the filtered data
+                totalRecordsLabel.innerText = `Total Records: ${filteredRows.length}`;
+                renderPagination(filteredRows.length);
+            }
+    
+            // Function to render pagination buttons
+            function renderPagination(totalRows) {
+                paginationContainer.innerHTML = ""; // Clear previous pagination
+    
+                const totalPages = Math.ceil(totalRows / rowsPerPage);
+    
+                // Create "previous" button
+                const prevButton = document.createElement("button");
+                prevButton.innerHTML = "« Previous";
+                prevButton.disabled = currentPage === 1;
+                prevButton.onclick = () => {
+                    currentPage--;
+                    renderTable();
+                };
+                paginationContainer.appendChild(prevButton);
+    
+                // Create page number buttons
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.innerHTML = i;
+                    pageButton.className = (i === currentPage) ? "active" : "";
+                    pageButton.onclick = () => {
+                        currentPage = i;
+                        renderTable();
+                    };
+                    paginationContainer.appendChild(pageButton);
+                }
+    
+                // Create "next" button
+                const nextButton = document.createElement("button");
+                nextButton.innerHTML = "Next »";
+                nextButton.disabled = currentPage === totalPages;
+                nextButton.onclick = () => {
+                    currentPage++;
+                    renderTable();
+                };
+                paginationContainer.appendChild(nextButton);
+            }
+    
+            // Update the number of rows per page
+            function updateRowsPerPage() {
+                rowsPerPage = parseInt(rowsPerPageSelect.value);
+                currentPage = 1; // Reset to first page when the user changes rows per page
+                renderTable();
+            }
+    
+            // Function to search the table based on user input
+            function searchTable() {
+                const query = searchInput.value.toLowerCase(); // Get the search term in lowercase
+    
+                // Filter rows based on search term
+                filteredRows = allRows.filter(row => {
+                    // Check if any cell in the row contains the search term
+                    return Array.from(row.cells).some(cell => {
+                        return cell.textContent.toLowerCase().includes(query);
+                    });
+                });
+    
+                // Reset to first page when search term changes
+                currentPage = 1;
+    
+                // Re-render the table with filtered data
+                renderTable();
+            }
+    
+            // Initial setup
+            rowsPerPageSelect.addEventListener("change", updateRowsPerPage);
+            searchInput.addEventListener("input", searchTable); // Attach search input event
+    
+            renderTable(); // Show all rows by default
+        });
+    </script>
+    
+    
+    
+
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+
+
+<script>
+    // Predefined color set (ordered as you requested)
+    const colors = [
+        '#3d5842', // Warm Beige/Sand
+        '#44624a', // Muted Terracotta/Warm Brown
+        '#4a7b58', // Dusty Lavender/Mauve
+        '#6b9f7d', // Existing green
+    ];
+
+    // Apply colors in order to each .eHot div
+    document.addEventListener('DOMContentLoaded', function() {
+        const eHotDivs = document.querySelectorAll('.eHot');
+        
+        eHotDivs.forEach((div, index) => {
+            // Use the index to cycle through the colors array
+            div.style.backgroundColor = colors[index % colors.length];
+        });
+    });
+</script>
+
+        
+        <script src="/script.js"></script>
+    
+</body>
+</html>

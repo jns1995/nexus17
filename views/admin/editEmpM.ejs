@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>NEXUS ID</title>
+    <style>
+.main-frame {
+    background-color: rgb(244, 246, 245);
+    padding: 10px 400px;
+    position: relative;
+    justify-content: center;
+}
+.main-content {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    gap: 15px;
+    background-color: transparent;
+}
+
+.card {
+    padding: 0;
+    height: 100%; /* Ensure cards take full height */
+    margin: 0;
+    width: 100%;
+}
+
+.card.left {
+    padding-right: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.card.right {
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
+    gap: 18px;
+}
+
+.top-row {
+    display: flex; /* Horizontal layout for the top row */
+    flex: 1.5; /* Takes 50% of the height of .card.right */
+    gap: 18px;
+}
+
+.bottom-row {
+    display: flex; /* Horizontal layout for the bottom row */
+    flex: 1; /* Takes 50% of the height of .card.right */
+    gap: 18px;
+    margin-bottom: 5px;
+}
+
+.mCard {
+    background-color: white;
+    border-radius: 14px;
+    flex: 1; /* Makes each mCard take equal width */
+    box-shadow: 0 2px 4px rgba(138, 138, 138, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 98%;
+    flex-direction: column;
+    padding: 20px 60px;
+    width: 100%;
+}
+.mCard.long {
+    flex: 1.5;
+}
+.mdCard.short {
+    flex: 1;
+}
+.snav a, .title a {
+    padding: 6px 2px;
+    color: black;
+    border-radius: 25px;
+    font-size: 10px;
+    height: 20px;
+    width: 5px;
+}
+.nav2 a i {
+    font-size: 10px;
+}
+.title {
+    width: 50%;
+}
+.nav2 {
+    height: 7%;
+    width: 100%;
+    padding: 0 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(138, 138, 138, 0.2);
+    border-radius: 14px;
+}
+.snav {
+    height: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 5px 0;
+}
+.txtPlate {
+    padding: 12px 8px;
+    border-radius: 22px;
+    font-size: 12px;
+    background-color: transparent;
+}
+.uphCard {
+    height: 85px;
+    width: 85px;
+    border: 1px solid gray;
+    border-radius: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.uphCard img {
+    width: 80%;
+    height: 80%;
+    border-radius: 80px;
+}
+p.txtInfo {
+    font-size: 12px;
+    margin: 0;
+    width: 100%;
+    padding: 12px 0;
+}
+p.txtInfo i {
+    font-size: 10px;
+}
+p.headInfo {
+    font-size: 16px;
+    font-weight: 500;
+    color: green;
+
+}
+.headInfo i {
+    color: green;
+}
+p.txtInfo.green {
+    color: green;
+}
+.txtInfo a {
+    text-decoration: none;
+    color: white;
+    background-color: orangered;
+    padding: 8px 12px;
+    border-radius: 18px;
+    transition: all 0.6s ease; /* Smooth transition */
+}
+a.resetPass:hover {
+    transform: scale(1.08);
+}
+.resetPass-frame {
+    position: absolute;
+    width: 78%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: 0;
+    z-index: 200;
+    background-color: rgb(244, 246, 245);
+}
+.resetPass-card {
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 6px 8px rgba(138, 138, 138, 0.6);
+    padding: 20px 40px;
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: space-between;
+    flex-direction: column;
+}
+.field input {
+    width: 100%;
+}
+.row {
+    width: 100%;
+    align-items: center;
+}
+.field {
+    width: 100%;
+}
+.upload-label input {
+    display: none; /* Hide the default file input */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="head-nav" style="margin-top: 0;">
+                <div class="nav" style="justify-content: flex-start; width: 100%;">               
+                    <div class="pnav" style="align-items: flex-start;">
+                    <a href="#" id="userIcon" class="userIcon" style=" border: 1px solid gray; border-radius: 50%; box-shadow: none;">
+                        <img src="<%= employeeData.userPhoto ? employeeData.userPhoto : '/images/profileX.jpg' %>" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                    </a>
+                    </div>
+                    <div class="snav">
+                        <% if (employeeData) { %>
+                            <% if (employeeData.role === 'Admin') { %>
+                                <p2>Welcome Admin <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else if (employeeData.role === 'HR') { %>
+                                <p2>Welcome HR <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else { %>
+                                <p2>Welcome <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } %>
+                        <% } else { %>
+                            <p2>Welcome Guest!</p2>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="side-nav">
+                <a href="/admin/notif" class="notif" style="position: relative; border: 0.5px solid lightgray;">
+                <i class="fas fa-bell"></i>
+                <% if (pendingCount > 0) { %>
+                    <span id="badge" class="badge"><%= pendingCount %></span>
+                <% } %>
+                Notification
+            </a>
+                    <a href="/admin/ann" class="ann" style="position: relative; border: 0.5px solid lightgray;">
+                        <i class="fas fa-circle-exclamation"></i> Announcements
+                    </a>
+                    <hr>
+                    <a href="/admin/das" class="das"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                    <a href="/admin/emp" class="active"><i class="fas fa-user-tie"></i> Employees</a>
+                    <a href="/admin/dig" class="dig"><i class="fas fa-address-card"></i> My Digital ID</a>
+                    <a href="/admin/dir" class="dir"><i class="fa-solid fa-address-book"></i> Directory</a>
+                    <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>
+            
+
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+        </div>
+
+        <div class="main-frame">
+            <div class="sub">
+                <div class="ctrl left">
+                    <a href="#" class="pbtn" onclick="goBack()"><i class="fa-solid fa-chevron-left"></i>Go Back</a>
+                </div>
+                <div class="ctrl right">
+                    <p1>Update <%= employee.firstName %>'s Account</p1>
+                </div>
+            </div>
+            <form action="/admin/updateEmpM/<%= employee.id %>" method="POST">
+                <div class="main-content">
+                    <div class="card left">
+                    <div class="mCard" style="padding: 30px;">
+                        <p class="headInfo">Complete Name</p>
+                        <br>
+                        <div class="row">
+                            <div class="field">
+                                <p3>First Name</p3>
+                                <input type="text" name="firstName" placeholder="First Name" value="<%= employee.firstName %>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field">
+                                <p3>Middle Name</p3>
+                                <input type="text" name="middleName" placeholder="Middle Name" value="<%= employee.middleName %>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field">
+                                <p3>Last Name</p3>
+                                <input type="text" name="lastName" placeholder="Last Name" value="<%= employee.lastName %>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field short">
+                                <p3>Ext Name</p3>
+                                <input type="text" name="extName" placeholder="Extension Name" value="<%= employee.extName %>">
+                            </div>
+                        </div>
+                        <br>
+                        <hr>
+                        <p class="headInfo">Job Description</p>
+                        <br>
+                        <div class="row">
+                            <div class="field">
+                                <p3>Employee Number</p3>
+                                <input type="text" name="userId" placeholder="User ID" value="<%= employee.userId %>">
+                            </div>
+                            <div class="field">
+                                <p3>Employment Type</p3>
+                                <select name="type">
+                                    <option value="" disabled>Select Employee Type</option>
+                                    <option value="Permanent" <%= employee.type === 'Permanent' ? 'selected' : '' %>>Permanent</option>
+                                    <option value="Co-Term" <%= employee.type === 'Co-Term' ? 'selected' : '' %>>Co-Term</option>
+                                    <option value="Elected" <%= employee.type === 'Elected' ? 'selected' : '' %>>Elected</option>
+                                    <option value="Job Order" <%= employee.type === 'Job Order' ? 'selected' : '' %>>Job Order</option>
+                                    <option value="Casual" <%= employee.type === 'Casual' ? 'selected' : '' %>>Casual</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field">
+                                <p3>Office</p3><select id="office" name="office">
+                                    <option value="" disabled>Select Office</option>
+                                    <option value="City Administrator’s Office" <%= employee.office === 'City Administrator’s Office' ? 'selected' : '' %>>City Administrator’s Office</option>
+                                    <option value="City Accounting Office" <%= employee.office === 'City Accounting Office' ? 'selected' : '' %>>City Accounting Office</option>
+                                    <option value="City Assessor’s Office" <%= employee.office === 'City Assessor’s Office' ? 'selected' : '' %>>City Assessor’s Office</option>
+                                    <option value="City Budget Office" <%= employee.office === 'City Budget Office' ? 'selected' : '' %>>City Budget Office</option>
+                                    <option value="City Business Permit and Licensing Office" <%= employee.office === 'City Business Permit and Licensing Office' ? 'selected' : '' %>>City Business Permit and Licensing Office</option>
+                                    <option value="City Civil Registrar’s Office" <%= employee.office === 'City Civil Registrar’s Office' ? 'selected' : '' %>>City Civil Registrar’s Office</option>
+                                    <option value="City Cooperative Development Office and Allied Services" <%= employee.office === 'City Cooperative Development Office and Allied Services' ? 'selected' : '' %>>City Cooperative Development Office and Allied Services</option>
+                                    <option value="City Disaster Risk Reduction and Management Office" <%= employee.office === 'City Disaster Risk Reduction and Management Office' ? 'selected' : '' %>>City Disaster Risk Reduction and Management Office</option>
+                                    <option value="City Economic Enterprise Management Office" <%= employee.office === 'City Economic Enterprise Management Office' ? 'selected' : '' %>>City Economic Enterprise Management Office</option>
+                                    <option value="City Engineering Office" <%= employee.office === 'City Engineering Office' ? 'selected' : '' %>>City Engineering Office</option>
+                                    <option value="City Environment and Natural Resources Office" <%= employee.office === 'City Environment and Natural Resources Office' ? 'selected' : '' %>>City Environment and Natural Resources Office</option>
+                                    <option value="City General Services Office" <%= employee.office === 'City General Services Office' ? 'selected' : '' %>>City General Services Office</option>
+                                    <option value="City Health Office" <%= employee.office === 'City Health Office' ? 'selected' : '' %>>City Health Office</option>
+                                    <option value="City Human Resource Management Office" <%= employee.office === 'City Human Resource Management Office' ? 'selected' : '' %>>City Human Resource Management Office</option>
+                                    <option value="City Information Office" <%= employee.office === 'City Information Office' ? 'selected' : '' %>>City Information Office</option>
+                                    <option value="City Library" <%= employee.office === 'City Library' ? 'selected' : '' %>>City Library</option>
+                                    <option value="City Motor Pool" <%= employee.office === 'City Motor Pool' ? 'selected' : '' %>>City Motor Pool</option>
+                                    <option value="City Planning and Development Office" <%= employee.office === 'City Planning and Development Office' ? 'selected' : '' %>>City Planning and Development Office</option>
+                                    <option value="City Population Office" <%= employee.office === 'City Population Office' ? 'selected' : '' %>>City Population Office</option>
+                                    <option value="City Public Employment Service Office" <%= employee.office === 'City Public Employment Service Office' ? 'selected' : '' %>>City Public Employment Service Office</option>
+                                    <option value="City Public Order and Safety Office" <%= employee.office === 'City Public Order and Safety Office' ? 'selected' : '' %>>City Public Order and Safety Office</option>
+                                    <option value="City Social Welfare and Development Office" <%= employee.office === 'City Social Welfare and Development Office' ? 'selected' : '' %>>City Social Welfare and Development Office</option>
+                                    <option value="City Tourism Office" <%= employee.office === 'City Tourism Office' ? 'selected' : '' %>>City Tourism Office</option>
+                                    <option value="City Traffic Management Unit" <%= employee.office === 'City Traffic Management Unit' ? 'selected' : '' %>>City Traffic Management Unit</option>
+                                    <option value="City Treasurer’s Office" <%= employee.office === 'City Treasurer’s Office' ? 'selected' : '' %>>City Treasurer’s Office</option>
+                                    <option value="Office of the City Mayor" <%= employee.office === 'Office of the City Mayor' ? 'selected' : '' %>>Office of the City Mayor</option>
+                                    <option value="Office of the City Vice Mayor" <%= employee.office === 'Office of the City Vice Mayor' ? 'selected' : '' %>>Office of the City Vice Mayor</option>
+                                    <option value="City Agriculture Office" <%= employee.office === 'City Agriculture Office' ? 'selected' : '' %>>City Agriculture Office</option>
+                                    <option value="City Veterinary Office" <%= employee.office === 'City Veterinary Office' ? 'selected' : '' %>>City Veterinary Office</option>
+                                    <option value="Community Affairs Office" <%= employee.office === 'Community Affairs Office' ? 'selected' : '' %>>Community Affairs Office</option>
+                                    <option value="Local Economic Investment and Promotion Office" <%= employee.office === 'Local Economic Investment and Promotion Office' ? 'selected' : '' %>>Local Economic Investment and Promotion Office</option>
+                                    <option value="Local Youth Development Office" <%= employee.office === 'Local Youth Development Office' ? 'selected' : '' %>>Local Youth Development Office</option>
+                                    <option value="Ospital ng Lungsod Agham ng Muñoz (OsLAM)" <%= employee.office === 'Ospital ng Lungsod Agham ng Muñoz (OsLAM)' ? 'selected' : '' %>>Ospital ng Lungsod Agham ng Muñoz (OsLAM)</option>
+                                    <option value="Sangguniang Panlungsod" <%= employee.office === 'Sangguniang Panlungsod' ? 'selected' : '' %>>Sangguniang Panlungsod</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field">
+                                <p3>Position</p3>
+                                <input type="text" name="position" placeholder="Position" value="<%= employee.position %>">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row ctrl" style="padding: 0 20px;">
+                            <button type="submit" id="submit">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </form>
+    </div>
+                
+    <script>
+        function togglePassword(inputId) {
+            const inputField = document.getElementById(inputId);
+            const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+            inputField.setAttribute('type', type);
+        }
+    </script>
+
+    <script>
+// para sa notif nav
+document.getElementById('notifIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const notifNav = document.querySelector('.notif-nav');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 5;
+
+    if (notifNav.style.display === 'none' || notifNav.style.display === '') {
+        notifNav.style.display = 'flex'; // Show the notif-nav
+        notifNav.style.right = '8px'; // Align to the right edge
+        notifNav.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('notif-icon-active'); // Add active class
+    } else {
+        notifNav.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('notif-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const notifNav = document.querySelector('.notif-nav');
+    if (!event.target.closest('#notifIcon') && !notifNav.contains(event.target)) {
+        notifNav.style.display = 'none'; // Hide the info-nav
+        document.getElementById('notifIcon').classList.remove('notif-icon-active'); // Remove active class
+    }
+});
+</script>
+
+
+
+
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    function showResetFrame() {
+        document.querySelector('.resetPass-frame').style.display = 'flex';
+    }
+
+    function hideResetFrame() {
+        document.querySelector('.resetPass-frame').style.display = 'none';
+    }
+
+    function togglePassword(inputId) {
+        const inputField = document.getElementById(inputId);
+        const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+        inputField.setAttribute('type', type);
+    }
+</script>
+<script src="script.js"></script>     
+</body>
+</html>

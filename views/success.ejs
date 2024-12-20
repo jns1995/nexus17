@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <title>NEXUS ID</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #4a7b58; /* Matcha green with 80% opacity */
+        }
+        .createCard {
+            width: 60%;
+            padding-left: 24px;
+            border-radius: 18px;
+            box-shadow: none;
+        }
+        .ctrl a.pbtn:hover {
+            background-color: transparent;
+            color: green;
+            cursor: pointer;
+        }
+        .formCard.left {
+            padding-right: 20px;
+            position: relative;
+        }
+        .displayCard {
+            width: 70%;
+            height: 80%;
+            background: linear-gradient(45deg, #28a745, #167c8c);
+            box-shadow: 0 8px 6px rgba(0, 0, 0, 0.4);
+            border: 0.5px solid rgba(255, 255, 255, 0.451);
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            transform: rotate(-10deg);
+            border-radius: 14px;
+            z-index: 3;
+        }
+        .displayIdCard {
+            width: 70%;
+            height: 80%;
+            border: 0.5px solid rgba(255, 255, 255, 0.451);
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.4); /* Soft shadow */
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+            border: 1px solid white;
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            border-radius: 14px;
+            z-index: 4;
+            transform: rotate(5deg);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 25px;
+            color: white;
+            font-size: 14px;
+            flex-direction: column;
+        }
+        .idPhoto {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 25%;
+            height: 20%;
+            background-color: transparent;
+            border-radius: 20px;
+            top: 25%;
+            right: 37.5%;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+            z-index: 4;
+            border: 0.5px solid white;
+            transform: rotate(5deg);
+        }
+        .idPhoto img {
+            height: 90%;
+            width: 90%;
+            opacity: 0.5;
+            border-radius: 500px;
+            border: 1px solid white;
+        }
+        .formClose {
+            position: relative;
+            width: auto;
+            padding: 10px;
+            color: white;
+            font-size: 12px;
+            background-color: green;
+        }
+        .formClose i {
+            font-size: inherit;
+            margin: 0 5px;
+        }
+        .formClose:hover {
+            color: green;
+            cursor: pointer;
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form class="createCard" id="createCard" action="" method=""> <!-- Add action and method attributes -->
+            <div class="formCard left">
+               <div class="displayCard"></div>
+               <div class="displayIdCard">
+                    Local Government Unit<br>
+                    Science City of Munoz
+                    <span style="margin-top: 150px; font-size: 18px; text-align: center;">EMPLOYEE ID <br> Management System</span>
+               </div>
+               <div class="idPhoto">
+                   <img src="/images/logo.png">
+               </div>
+            </div>
+    
+            <div class="formCard right" style="align-items: center; text-align: center;">
+                <fh>
+                    Registration Successful!
+                </fh>
+                <br><hr><br>
+                <p1>
+                    Thank you for registering with us!
+                    <br><br>
+                    Your details have been submitted successfully. 
+                    HR Personnel will review your information to verify your status as a bonafide employee. 
+                    This process may take 2-3 business days.
+                    <br><br>
+                    You will receive a notification once your registration has been approved.
+                    <br><br>
+                    We appreciate your patience, and look forward to welcoming you onboard!
+
+                </p1>
+                <br>
+                <div class="formClose" id="formClose" style="width: 100%; border-radius: 8px; background-color: transparent; color: black; border: 1px solid gray;">
+                    <i class="fa-solid fa-chevron-left"></i> GO BACK
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('formClose').addEventListener('click', function() {
+            window.location.href = '/admin/welcome'; // Redirect to welcome.html
+        });
+    </script>
+    
+
+</body>
+</html>

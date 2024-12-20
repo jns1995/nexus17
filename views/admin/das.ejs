@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/js/admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <title>NEXUS ADMIN</title>
+    <style>
+        .main-frame {
+            overflow: hidden;
+        }
+        .head-nav {
+            margin-bottom: 0;
+        }
+        .main-content {
+            overflow: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex: 1; /* Take remaining height */
+            gap: 30px;
+            flex-direction: row;
+            height: 300px;
+            padding: 0 5px 0 0;
+            background-color: transparent;
+            overflow: hidden;
+        }
+        .main-content.desc {
+            background-color: white;
+            margin: 0 10px 0 0;
+            border: 0.5px solid rgb(236, 235, 235);
+            flex: 1;
+            height: auto;
+            padding: 10px;
+            overflow: hidden;
+        }
+        .pframe {
+            flex: 3; /* 75% width */
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Match analysis-frame height */
+            border-radius: 18px;
+            padding: 10px 10px;
+            position: relative;
+            justify-content: flex-end;
+            align-items: center;
+            border: 0.5px solid rgb(197, 195, 1950, 0.3);
+            box-shadow: 0 0 10px rgba(162, 162, 162, 0.5);
+            background-color: white;
+        }
+
+        .sframe {
+            flex: 1; /* 25% width */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            height: 90%;
+            padding-right: 5px;
+        }
+
+        .stocks-frame, .delivery-frame {
+            flex: 1; /* Equal height rows */
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the start */
+            flex-direction: column;
+            position: relative;
+        }
+        .stocks-frame {
+            color: #253528;
+            box-shadow: 0 0 10px rgba(162, 162, 162, 0.3);
+        }
+        .delivery-frame {
+            box-shadow: 0 0 10px rgba(162, 162, 162, 0.3);
+            height: 150px; /* Set a maximum height for charts */
+            color: #476b40;
+        }
+        .stocks-frame i {
+            color:white;
+            font-size: 14px;
+        }
+        #myDonutChart {
+            max-height: 145px; /* Set a maximum height for charts */
+            z-index: 1;
+        }
+        #IdChart {
+            width: 100%;
+            max-height: 150px;
+        }
+        #myChart, #monthlySuccessChart {
+            max-height: 200px;
+        }
+        .small-select {
+            appearance: none;
+            font-size: 14px;
+            padding: 5px 10px;
+            position: absolute;
+            right: 10px;
+            top: 13px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+        }
+        .divrow {
+            padding: 5px;
+            gap: 10px;
+            overflow: hidden;
+            justify-content: flex-start;
+        }
+        .divcol {
+            border-radius: 10px;
+            color: white;
+            align-items: flex-start;
+            padding: 5px;
+            gap: 5px;
+            max-width: 30%;
+            box-shadow: 0 2px 8px rgba(162, 162, 162, 0.3);
+            height: 100px;
+        }
+        .divcol:hover {
+            transform: scale(1.05);
+        }
+        .divcol i {
+            color: #364e3b;
+            font-size: 18px;
+            text-align: center;
+            margin-right: 5px;
+        }
+        .summary {
+            width: 100%;
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: auto;
+            overflow: hidden;
+        }
+        .titleCard a {
+            background-color: #bceace;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: normal;
+            font-size: 14px;
+            color: green;
+        }
+        
+        .ctrl.right a, .sub a {
+            text-decoration: none;
+            padding: 10px;
+            color: black; /* Default link color */
+            border: 1px solid transparent;
+            border-radius: 18px;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: white;
+            margin: 0;
+            justify-content: center;
+            align-items: center;
+        }
+        .sub a:hover {
+            transform: scale(1.08);
+            transition: all 0.6s ease; /* Smooth transition */
+        }
+        .ctrl.right a.active {
+            background-color: #4a7b58;
+            color: white; /* Active text color */
+        }
+        
+        .ctrl.right a.active i {
+            color: white; /* Active text color */
+        }
+        .ctrl.right a:hover {
+            background-color: #80ae90;
+            color: white; /* Hover text color */
+        }
+        .ctrl.right a:hover i {
+            color: white;
+        }
+        .ctrl a i {
+            color: black;
+        }
+        td {
+            font-size: 14px;
+        }
+        .tBrgy {
+            width: 85%;
+        }
+        .divcol ph {
+            font-size: 16px;
+            font-weight: 400;
+        }
+        .divcol p1 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .divcol p2 {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .ctrl.left a {
+            max-width: 200px;
+            width: 125px;
+        }
+        .gta {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            gap: 10px;
+        }
+        .ageTotal, .typeTotal {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            border-radius: 10px;
+        }
+        .tGender th {
+            background-color: #69816e;
+            color: white ;
+        }
+        .tAge th, .tOffice th {
+            background-color: #56715c ;
+            color: white ;
+        }
+        .tType th, .tBrgy th {
+            background-color: #c0cfb2 ;
+            color: #2f4433 ;
+        }
+        .typeTotal .divcol {
+            justify-content: center;
+            align-items: center;
+        }
+
+.divcol.records:nth-child(5n+1) {
+    background-color: #6b9f7d; /* 1st, 6th, 11th, etc. */
+}
+
+.divcol.records:nth-child(5n+2) {
+    background-color: #4a7b58; /* 2nd, 7th, 12th, etc. */
+}
+
+.divcol.records:nth-child(5n+3) {
+    background-color: #44624a; /* 3rd, 8th, 13th, etc. */
+}
+
+.divcol.records:nth-child(5n+4) {
+    background-color: #3d5842; /* 4th, 9th, 14th, etc. */
+}
+
+.divcol.records:nth-child(5n+5) {
+    background-color: #364e3b; /* 5th, 10th, 15th, etc. */
+}
+
+@media print {
+    .analytics {
+        -webkit-print-color-adjust: exact; /* Chrome/Safari */
+        print-color-adjust: exact; /* Firefox */
+    }
+    .main-content.graph {
+        display: none;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="head-nav" style="margin-top: 0;">
+                <div class="nav" style="justify-content: flex-start; width: 100%;">               
+                    <div class="pnav" style="align-items: flex-start;">
+                    <a href="#" id="userIcon" class="userIcon" style=" border: 1px solid gray; border-radius: 50%; box-shadow: none;">
+                        <img src="<%= employeeData.userPhoto ? employeeData.userPhoto : '/images/profileX.jpg' %>" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                    </a>
+                    </div>
+                    <div class="snav">
+                        <% if (employeeData) { %>
+                            <% if (employeeData.role === 'Admin') { %>
+                                <p2>Welcome Admin <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else if (employeeData.role === 'HR') { %>
+                                <p2>Welcome HR <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else { %>
+                                <p2>Welcome <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } %>
+                        <% } else { %>
+                            <p2>Welcome Guest!</p2>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="side-nav">
+                <a href="/admin/notif" class="notif" style="position: relative; border: 0.5px solid lightgray;">
+                <i class="fas fa-bell"></i>
+                <% if (pendingCount > 0) { %>
+                    <span id="badge" class="badge"><%= pendingCount %></span>
+                <% } %>
+                Notification
+            </a>
+                    <a href="/admin/ann" class="ann" style="position: relative; border: 0.5px solid lightgray;">
+                        <i class="fas fa-circle-exclamation"></i> Announcements
+                    </a>
+                    <hr>
+                    <a href="/admin/das" class="active"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                    <a href="/admin/emp" class="emp"><i class="fas fa-user-tie"></i> Employees</a>
+                    <a href="/admin/dig" class="dig"><i class="fas fa-address-card"></i> My Digital ID</a>
+                    <a href="/admin/dir" class="dir"><i class="fa-solid fa-address-book"></i> Directory</a>
+                    <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>
+
+            <div class="link" style="height: 6%; display: flex; align-items: center; gap: 10px; margin-right: 10px;">
+                <a href="https://www.facebook.com/sciencecityofmunoz3119/" target="blank">
+                    <i class="fa-brands fa-facebook-f"></i> Fb Page
+                </a> 
+                <a href="https://sciencecityofmunoz.gov.ph/" target="blank">
+                    <i class="fas fa-globe"></i> Website
+                </a>
+            </div>
+            <br>
+            
+
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+        </div>
+
+
+        <div class="main-frame">
+            <div class="head-nav">
+                <div class="title">
+                    <ph>Dashboard</ph>
+                </div>
+                <div class="nav">
+                    <div class="snav">
+                    </div>                    
+                    <div class="pnav">
+                        <a href="javascript:void(0);" class="pbtn" onclick="printDas()">
+                            <i class="fa-solid fa-print"></i> Print Data
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+
+<div class="analytics" style="overflow-y: scroll; gap: 10px; background-color: #d9dfda; padding: 10px; border-radius: 10px;">
+
+    <div class="sub" style="height: 35px; display: flex; align-items: center; justify-content: flex-start;">
+        <p style="font-size: 20px; font-weight: 500; color: #364e3b;">
+            <i class="fas fa-address-card" style="font-size: 20px; color: inherit; margin: 8px;"></i>
+            ID Card Issuance Insights
+        </p>
+        <a href="/admin/das2" class="pbtn">
+            <i class="fas fa-chart-line"></i> View Reports
+        </a>
+    </div>
+
+        <div class="divrow">
+            <% Object.keys(highestRecord.successByType).forEach(function(type) { %>
+            <div class="divcol records" style="padding: 20px; border-radius: 20px;">
+            <ph><%= type %></ph>
+            <p1 style="font-size: 26px; display: flex; justify-content: flex-start; flex-direction: row; align-items: flex-end; width: 100%; gap: 10px;">
+                <%= highestRecord.successByType[type].successCount %>
+                <p2 style="background-color: white; border-radius: 20px; color: green; padding: 6px;"><%= highestRecord.successByType[type].percentage %>%</p2>
+            </p1>
+        </div>
+        <% }); %>
+    </div>
+    
+
+
+    <div class="main-content graph" style="align-items: flex-start; display: none;">
+        <div class="pframe">
+            <div>
+                <p1 style="padding: 10px; position: absolute; left: 10px; top: 6px;">ISSUED ID TRACKER
+                </p1>
+                </select>
+            </div>
+                <canvas id="myChart" width="" height=""></canvas>
+        </div>
+    </div>
+
+    <div class="main-content graph" style="align-items: flex-start; overflow: hidden;">
+        <iframe src="/admin/status-chart" class="pframe" style="overflow: hidden;"></iframe>
+    </div>
+
+            <br><br><br>
+
+            <div class="sub" style="height: 35px; display: flex; align-items: center; background-color: white;">
+                <p style="font-size: 20px; font-weight: 500; color: #364e3b;">
+            <i class="fas fa-user-tie" style="font-size: 20px; color: inherit; margin: 8px;"></i>
+            Employee Records Overview
+        </p>
+    </div>
+
+            <div class="gta">
+                <div class="typeTotal">
+                    <br>
+                    <p1>Highest No. on Record</p1>
+                    <div class="divrow" style="height: 150px;">
+                        <div class="divcol records" style="max-width: 62%; background-color: white; color: #2f4433; border: 1px solid #ffffff;">
+                            <p1><%= highestRecord.office.total %></p1>
+                            <ph><%= highestRecord.office.office %></ph>
+                            <p2>Office &bull; <span class="green"><%= highestRecord.office.percentage.toFixed(2) + '%' %></span></p2>
+                        </div>
+                        <div class="divcol issued" style="max-width: 30%; background-color: white; color: #2f4433; border: 1px solid #ffffff;">
+                            <p1><%= highestRecord.barangay.total %></p1>
+                            <ph><%= highestRecord.barangay.brgyName %></ph>
+                            <p2>Barangay &bull; <span class="green"><%= highestRecord.barangay.percentage.toFixed(2) + '%' %></span></p2>
+                        </div>
+                    </div>
+                    <div class="divrow" style="height: 100px;">
+                        <div class="divcol extra" style="background-color: white; color: #2f4433; border: 1px solid #ffffff;">
+                            <p1><%= highestRecord.type.total %></p1>
+                            <ph><%= highestRecord.type.type %></ph>
+                            <p2>Type &bull; <span class="green"><%= highestRecord.type.percentage.toFixed(2) + '%' %></span></p2>
+                        </div>
+                        <div class="divcol pending" style="background-color: white; color: #2f4433; border: 1px solid #ffffff;">
+                            <p1><%= highestRecord.ageGroups[2].total %></p1> <!-- 35-44 -->
+                            <ph>35-44</ph>
+                            <p2>Age &bull; <span class="green"><%= highestRecord.ageGroups[2].percentage + '%' %></span></p2>
+                        </div>
+                        <% if (highestRecord.female.total > highestRecord.male.total) { %>
+                            <div class="divcol pending" style="background-color: white; color: #2f4433; border: 1px solid #ffffff;">
+                                <p1><%= highestRecord.female.total %></p1>
+                                <ph>Female</ph>
+                                <p2>Gender &bull; <span class="green"><%= highestRecord.female.percentage.toFixed(2) + '%' %></span></p2>
+                            </div>
+                        <% } else { %>
+                            <div class="divcol pending" style="background-color: white; color: #2f4433; border: 1px solid #ffffff;">
+                                <p1><%= highestRecord.male.total %></p1>
+                                <ph>Male</ph>
+                                <p2>Gender &bull; <span class="green"><%= highestRecord.male.percentage.toFixed(2) + '%' %></span></p2>
+                            </div>
+                        <% } %>
+                    </div>
+                    <br>
+                    <table class="tType" id="tType" style="display: block;">
+                        <thead>
+                            <tr>
+                                <th style="width: 90%;">Type</th>
+                                <th style="width: 5%;">Total</th>
+                                <th style="width: 10%;">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% employeeTypes.forEach(type => { %>
+                                <tr>
+                                    <td><%= type.type %></td>
+                                    <td><center><%= type.total %></center></td>
+                                    <td style="text-align: right;"><%= type.percentage.toFixed(2) + '%' %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                    <br>
+                </div>
+                <div class="ageTotal"> 
+                    <br>
+                    <table class="tAge" id="tAge" style="display: block;">
+                        <thead>
+                            <tr>
+                                <th style="width: 80%;">Age Range</th>
+                                <th style="width: 10%;">Total</th>
+                                <th style="text-align: right; width: 10%;">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% const totalEmployees = offices.reduce((sum, office) => sum + office.total, 0); %><tr>
+                                <td>18-24</td>
+                                <td style="text-align: center;"><%= ageDistribution.age_18_24 %></td>
+                                <td style="text-align: right;">
+                                    <% 
+                                    const percentage18_24 = ageDistribution.age_18_24 / totalEmployees * 100;
+                                    %>
+                                    <%= ageDistribution.age_18_24 === 0 ? '--' : percentage18_24.toFixed(2) + '%' %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>25-34</td>
+                                <td style="text-align: center;"><%= ageDistribution.age_25_34 %></td>
+                                <td style="text-align: right;">
+                                    <% 
+                                    const percentage25_34 = ageDistribution.age_25_34 / totalEmployees * 100;
+                                    %>
+                                    <%= ageDistribution.age_25_34 === 0 ? '--' : percentage25_34.toFixed(2) + '%' %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>35-44</td>
+                                <td style="text-align: center;"><%= ageDistribution.age_35_44 %></td>
+                                <td style="text-align: right;">
+                                    <% 
+                                    const percentage35_44 = ageDistribution.age_35_44 / totalEmployees * 100;
+                                    %>
+                                    <%= ageDistribution.age_35_44 === 0 ? '--' : percentage35_44.toFixed(2) + '%' %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>45-54</td>
+                                <td style="text-align: center;"><%= ageDistribution.age_45_54 %></td>
+                                <td style="text-align: right;">
+                                    <% 
+                                    const percentage45_54 = ageDistribution.age_45_54 / totalEmployees * 100;
+                                    %>
+                                    <%= ageDistribution.age_45_54 === 0 ? '--' : percentage45_54.toFixed(2) + '%' %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>55-64</td>
+                                <td style="text-align: center;"><%= ageDistribution.age_55_64 %></td>
+                                <td style="text-align: right;">
+                                    <% 
+                                    const percentage55_64 = ageDistribution.age_55_64 / totalEmployees * 100;
+                                    %>
+                                    <%= ageDistribution.age_55_64 === 0 ? '--' : percentage55_64.toFixed(2) + '%' %>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>65+</td>
+                                <td style="text-align: center;"><%= ageDistribution.age_65_plus %></td>
+                                <td style="text-align: right;">
+                                    <% 
+                                    const percentage = (ageDistribution.age_65_plus / totalEmployees * 100).toFixed(2);
+                                    %>
+                                    <%= ageDistribution.age_65_plus === 0 ? '--' : percentage + '%' %>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    <div style="background-color: transparent; width: 95%; height: 200px; display: flex; justify-content: center; align-items: center; border-radius: 10px;">
+                        <canvas id="myDonutChart" width="100px" height="" style="max-width: 200px;"></canvas>
+                        <div style="width: 80%">
+                            <table class="tGender" id="tGender" style="display: block;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80%;">Gender</th>
+                                        <th style="width: 10%;">Total</th>
+                                        <th style="width: 10%;">Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% genders.forEach(gender => { %>
+                                        <tr>
+                                            <td><%= gender.gender %></td>
+                                            <td><%= gender.total %></td>
+                                            <td style="text-align: right;"><%= gender.percentage.toFixed(2) + '%' %></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+                <div class="main-content desc">
+                    <div class="summary" style="display: flex; flex-direction: row; align-items: flex-start;">
+                        <table class="tOffice" id="tOffice" style="width: 50%;">
+                            <thead>
+                                <tr>
+                                    <th>Office</th>
+                                    <th style="width: 5%;">Total</th>
+                                    <th style="width: 5%;">Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% offices.forEach(office => { %>
+                                    <tr>
+                                        <td><%= office.office %></td>
+                                        <td><center><%= office.total %></center></td>
+                                        <td style="text-align: right;"><%= office.percentage.toFixed(2) + '%' %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                        
+                        <table class="tBrgy" id="tBrgy" style="width: 50%; border-left: 1px solid lightgray; border-radius: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Barangay</th>
+                                    <th style="width: 5%;">Total</th>
+                                    <th style="width: 5%;">Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% barangays.forEach(barangay => { %>
+                                    <tr>
+                                        <td><%= barangay.brgyName %></td>
+                                        <td><center><%= barangay.total %></center></td>
+                                        <td style="text-align: right;"><%= barangay.percentage.toFixed(2) + '%' %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateToPage() {
+            const selectElement = document.getElementById('filterInput');
+            const selectedValue = selectElement.value;
+    
+            if (selectedValue) {
+                // Redirect to the selected page
+                window.location.href = selectedValue;
+            }
+        }
+    </script>
+
+<script>
+    const ctx1 = document.getElementById('myDonutChart').getContext('2d');
+
+    // Create gradients
+    const gradientMale = ctx1.createLinearGradient(0, 0, 0, 400);
+    gradientMale.addColorStop(0, '#44624a'); 
+    gradientMale.addColorStop(1, '#4a7b58'); 
+    
+    const gradientFemale = ctx1.createLinearGradient(0, 0, 0, 400);
+    gradientFemale.addColorStop(0, '#8ba888'); 
+    gradientFemale.addColorStop(1, '#fce2a0'); 
+
+    // Prepare data for the chart
+    const labels = [];
+    const dataValues = [];
+
+    <% genders.forEach(gender => { %>
+        labels.push('<%= gender.gender %>'); // Add gender label
+        dataValues.push(<%= gender.total %>); // Add total number
+    <% }) %>
+
+    const myDonutChart = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+            labels: labels, // Use dynamic labels
+            datasets: [{
+                data: dataValues, // Use dynamic data
+                backgroundColor: [gradientMale, gradientFemale],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '55%',
+            plugins: {
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: (tooltipItem) => {
+                            const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                            const currentValue = tooltipItem.raw;
+                            const percentage = ((currentValue / total) * 100).toFixed(1);
+                            return `${tooltipItem.label}: ${currentValue}  •  (${percentage}%)`;
+                        }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        color: '#476b40',
+                        font: {
+                            size: 12,
+                            family: 'poppins'
+                        }
+                    }
+                },
+                datalabels: {
+                    color: 'white',
+                    font: {
+                        size: 14
+                    },
+                    formatter: (value, context) => {
+                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return `${percentage}%`;
+                    },
+                    anchor: 'end',
+                    align: 'end'
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    // Bar chart data
+    const Line = document.getElementById('IdChart').getContext('2d');
+    const employmentTypes = ['Casual', 'Co-Term', 'Elected', 'Job-Order', 'Permanent'];
+
+    // Data arrays
+    const totalIssued = [60, 30, 87, 44, 25]; // Number of issued IDs
+    const totalEmployees = [100, 50, 98, 60, 80]; // Total number of employees for each type
+
+    // Function to determine background color based on highest value
+    const getBackgroundC = (data) => {
+        const maxValue = Math.max(...data);
+        return data.map(value => (value === maxValue ? '#d28c6c' : '#e9f5db')); // Change color for max value
+    };
+
+    const IdChart = new Chart(Line, {
+        type: 'bar',
+        data: {
+            labels: employmentTypes,
+            datasets: [
+                {
+                    label: 'Issued IDs',
+                    data: totalIssued,
+                    backgroundColor: '#44624a', // Static color for issued IDs
+                    borderWidth: 1,
+                    barThickness: 24,
+                    borderRadius: 0,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: 'Total Employees',
+                    data: totalEmployees,
+                    backgroundColor: '#8ba888', // Dynamic color for employees
+                    borderWidth: 1,
+                    barThickness: 24,
+                    borderRadius: 0,
+                    yAxisID: 'y2'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true, // Show the legend
+                    position: 'top', // Position the legend at the bottom
+                    labels: {
+                        color: '#253528', // Change legend text color for visibility
+                        font: {
+                            size: 12, // Increased font size for legend
+                            family: 'poppins', // Optional: change font family
+                        },
+                        paddingBottom: 5     // Add space between legend and chart
+                    }
+                }
+            },
+            scales: {
+                y1: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        display:false,
+                        color: '#253528', // Change y1 ticks color to white
+                        font: {
+                            size: 10, // Adjust size for visibility
+                            family: 'poppins' // Optional: change font family
+                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Issued IDs'
+                    }
+                },
+                y2: {
+                    beginAtZero: true,
+                    position: 'right',
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        display:false,
+                        color: '#253528', // Change y2 ticks color to white
+                        font: {
+                            size: 8, // Adjust size for visibility
+                            family: 'poppins' // Optional: change font family
+                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Total Employees'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#253528', // Change x ticks color to white
+                        font: {
+                            size: 7, // Font size for x-axis labels
+                            family: 'poppins', // Optional: change font family
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        },
+    });
+</script>
+
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    const myChart = new Chart(ctx, {
+        type: 'bar', // Bar chart
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Elected',
+                    data: [120, 35, 50, 220, 85, 100, 150, 130, 170, 190, 20, 65], // Shuffled data
+                    backgroundColor: '#6b9f7d', // Bar color
+                },
+                {
+                    label: 'Co-term',
+                    data: [15, 200, 30, 70, 20, 90, 160, 140, 50, 180, 110, 160], // Shuffled data
+                    backgroundColor: '#4a7b58', // Bar color
+                },
+                {
+                    label: 'Casual',
+                    data: [90, 40, 70, 210, 230, 110, 250, 160, 190, 30, 55, 140], // Shuffled data
+                    backgroundColor: '#44624a', // Bar color
+                },
+                {
+                    label: 'Job-order',
+                    data: [10, 45, 150, 65, 20, 35, 85, 120, 105, 165, 180, 150], // Shuffled data
+                    backgroundColor: '#3d5842', // Bar color
+                },
+                {
+                    label: 'Permanent',
+                    data: [5, 240, 15, 70, 10, 30, 90, 150, 120, 180, 210, 50], // Shuffled data
+                    backgroundColor: '#364e3b', // Bar color
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'black',
+                        font: {
+                            size: 14,
+                            family: 'poppins'
+                        }
+                    },
+                    grid: {
+                        color: 'transparent'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black',
+                        font: {
+                            size: 16,
+                            family: 'poppins',
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            },
+            elements: {
+                bar: {
+                    borderWidth: 0, // Removed border color
+                    borderRadius: 0, // Optional: rounded corners
+                    barThickness: 35,
+                }
+            }
+        }
+    });
+</script>
+<script>
+    function showTable(tableId, element) {
+        // Hide both tables
+        document.getElementById('tOffice').style.display = 'none';
+        document.getElementById('tBrgy').style.display = 'none';
+        
+        // Show the selected table
+        document.getElementById(tableId).style.display = 'table';
+        
+        // Update active button
+        const tabs = document.querySelectorAll('.ctrl.right a');
+        tabs.forEach(tab => {
+            tab.classList.remove('active'); // Remove active class from all tabs
+        });
+        element.classList.add('active'); // Add active class to the clicked tab
+    }
+</script>
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+
+
+<script>
+    function printDas() {
+        const sections = document.querySelectorAll('.analytics'); // Fixed class name
+        let printContent = '';
+
+        sections.forEach(section => {
+            printContent += section.outerHTML; // Use outerHTML to include the entire element
+        });
+
+        const originalContent = document.body.innerHTML;
+
+        // Temporarily replace body content
+        document.body.innerHTML = printContent; 
+        window.print(); // Open print dialog
+
+        // Restore original content after the print dialog is opened
+        setTimeout(() => {
+            document.body.innerHTML = originalContent;
+            window.location.reload(); // Reload the page to reset
+        }, 0);
+    }
+</script>
+<script>
+    // When the page is ready, load the content of /admin/status-chart into pframe
+    $(document).ready(function() {
+        // Send an AJAX request to fetch the status chart page content
+        $.get('/admin/status-chart', function(data) {
+            // Inject the HTML content of /status-chart into the pframe div
+            $('.pframe').html(data);
+        }).fail(function() {
+            // If the AJAX request fails, show an error message
+            $('.pframe').html('<p>Failed to load the chart.</p>');
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('monthlySuccessChart').getContext('2d');
+    var monthlySuccessCounts = <%= JSON.stringify(monthlySuccessCounts) %>;
+
+    var chart = new Chart(ctx, {
+        type: 'line',  // Or 'bar', 'pie', etc.
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Monthly Success Count',
+                data: monthlySuccessCounts,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: false,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Success Count'
+                    }
+                }
+            }
+        });
+</script>
+
+<script src="/script.js"></script>
+</body>
+</html>

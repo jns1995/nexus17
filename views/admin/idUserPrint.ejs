@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.0/qrious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>NEXUS EMPLOYEE</title>
+    <style>
+        .main-content {
+            overflow: auto;
+            background-color: transparent;
+            background-color: rgb(244, 245, 246);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 18px 14px;
+            display: block;
+            font-family: 'poppins', sans-serif;
+            position: relative;
+        }
+        .rowCard {
+            flex-direction: row;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 98%;
+            width: 100%;
+            border-radius: 20px;
+            gap: 15px;
+            font-family: 'poppins', sans-serif;
+        }
+        .colCard {
+            flex-direction: column;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            border-radius: 20px;
+            gap: 15px;
+            font-family: 'poppins', sans-serif;
+        }
+        .idCard.small {
+            height: calc(900px * 0.6);
+            width: calc(600px * 0.6);
+            border: 1px solid green;
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'poppins', sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        .idCard.small p1, .idCard.large p1 {
+            font-size: 22px;
+        }
+        .idCard.large {
+            height: calc(950px * 0.6);
+            width: calc(650px * 0.6);
+            border: 1px solid green;
+            border-radius: 15px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'poppins', sans-serif;
+            padding: 40px;
+            text-align: center;
+        }
+        .rowCard.viewS, .rowCard.viewL {
+            height: auto;
+            justify-content: center;
+        }
+        #editRequest, #qrCode, #biometrics, #ctrlWidget {
+            box-shadow: 0 4px 6px lightgray;
+            padding: 0;
+        }
+        #editRequest {
+            background-color: white;
+            box-shadow: 0 4px 6px lightgray;
+            gap: 0;
+            padding: 35px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        #qrCode {
+            background-color: white;
+        }
+        #printPiD {
+            background-color: white;
+            box-shadow: 0 4px 6px lightgray;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            display: flex;
+            padding: 0;
+        } 
+        #biometrics {
+            background-color: white;
+            padding: 5px;
+        }
+        #ctrlWidget {
+            background-color: white;
+        }
+        #qrImg {
+            height: 100px;
+            width: 100px;
+            border-radius: 8px;
+        }
+        #idInfo {
+            overflow-y: auto;
+            justify-content: flex-start;
+            padding: 20px;
+            gap: 0;
+        }
+        #smallFront {
+            background-image: url('/images/idBg.png');
+            background-size: 100% 100%;
+        }
+        #largeFront {
+            background-image: url('/images/idBg2.png');
+            background-size: 100% 100%;
+        }
+        #smallBack {
+            background-image: url('/images/idBg3.png');
+            background-size: 100% 100%;
+        }
+        #largeBack {
+            background-image: url('/images/idBg4.png');
+            background-size: 100% 100%;
+        }
+        #printPiD img {
+            width: 50%;
+            height: auto;
+            border-radius: 16px;
+        }
+        #printPiD .row.ctrl {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+        }
+        .row.ctrl {
+            display: flex;
+            width: 90%;
+            justify-content: center;
+            align-items: center;
+        }
+        .row.ctrl button {
+            padding: 8px 16px;
+            color: #006400;
+            text-align: center;
+            border-radius: 20px;
+            border: 0.5px solid lightgray;
+            font-size: 12px;
+            text-decoration: none;
+            background-color: white;
+            max-width: 60%;
+            width: 60%;
+        }
+        .uphCard {
+            height: 70px;
+            width: 70px;
+            font-family: 'poppins', sans-serif;
+        }
+        .uphCard2 {
+            height: 150px;
+            width: 150px;
+            font-family: 'poppins', sans-serif;
+        }
+        .uphCard img {
+            width: 100%;
+            height: 100%;
+            border-radius: 120px;
+        }
+        .uphCard2 img {
+            width: 100%;
+            height: 100%;
+            border-radius: 120px;
+        }
+        hr {
+            border: 0.5px solid lightgray;
+            width: 90%;
+        }
+        .green {
+            color: green;
+            font-weight: normal;
+        }
+        table {
+            font-weight: 500;
+            padding: 0;
+        }
+        ph {
+            font-size: 32px;
+        }
+        p.txtInfo {
+            font-size: 12px;
+            margin: 0;
+            width: 100%;
+            padding: 5px 0;
+        }
+        p.txtInfo i {
+            font-size: 10px;
+        }
+        p.headInfo {
+            font-size: 14px;
+            font-weight: 500;
+            color: green;
+            width: 100%;
+        }
+        .headInfo i {
+            color: green;
+        }
+        p.txtInfo.green {
+            color: green;
+        }
+        .txtInfo a {
+            text-decoration: none;
+            color: white;
+            background-color: orangered;
+            padding: 8px 12px;
+            border-radius: 18px;
+            transition: all 0.6s ease; /* Smooth transition */
+        }
+        #ctrlNav {
+            width: 380px;
+            height: 430px;
+            max-height: 500px;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            right: 3%;
+            display: flex;
+            padding: 25px;
+            box-shadow: 0 4px 6px gray;
+            border-radius: 20px;
+            flex-direction: column;
+        }
+
+        @media print {
+    body * {
+        display: none; /* Hide all elements by default */
+        margin: 0;
+        padding: 0;
+        page-break-inside: avoid; /* Prevent page breaks inside rowCard */
+    }
+    .main-content {
+        gap: 0;
+        page-break-inside: avoid; /* Prevent page breaks inside rowCard */
+    }
+    .rowCard {
+        -webkit-print-color-adjust: exact; /* Chrome/Safari */
+        print-color-adjust: exact; /* Firefox */
+            page-break-before: auto;
+            page-break-after: auto;
+            page-break-inside: avoid; /* Prevent page breaks inside rowCard */
+    }
+    .rowCard.viewS {
+        -webkit-print-color-adjust: exact; /* Chrome/Safari */
+        print-color-adjust: exact; /* Firefox */
+    }
+    .rowCard.viewL {
+        -webkit-print-color-adjust: exact; /* Chrome/Safari */
+        print-color-adjust: exact; /* Firefox */
+        gap: 0;
+        margin: 0;
+        padding: 0;
+    }
+    /* Show only the small ID cards */
+    .idCard.small, .idCard.small * {
+        display: flex; /* Show small ID card and its contents */
+        -webkit-print-color-adjust: exact; /* Chrome/Safari */
+        print-color-adjust: exact; /* Firefox */
+        margin: 0 auto; /* Reduce margin to decrease space between idCards */
+        flex-direction: column;
+    }
+
+    /* Specific styles for smallFront */
+    #smallFront {
+        background-image: url('/images/idBg.png'); /* Set background image for small front */
+        background-size: cover; /* Ensure it covers the div */
+        height: calc(900px * 0.6);
+        width: calc(600px * 0.6);
+            transform: scale(0.6); /* Scale down the idCard */
+            transform-origin: top left; /* Ensure scaling is from the top left */
+            margin: 0 auto; /* Reduce margin to decrease space between idCards */
+            display: flex;
+    }
+
+    /* Specific styles for smallBack */
+    #smallBack {
+        background-image: url('/images/idBg3.png'); /* Set background image for small back */
+        background-size: cover; /* Ensure it covers the div */
+        height: calc(900px * 0.6);
+        width: calc(600px * 0.6);
+            transform: scale(0.6); /* Scale down the idCard */
+            transform-origin: top left; /* Ensure scaling is from the top left */
+            margin: 0 auto; /* Reduce margin to decrease space between idCards */
+    }
+    .idCard.large, .idCard.large * {
+        display: flex; /* Show small ID card and its contents */
+        -webkit-print-color-adjust: exact; /* Chrome/Safari */
+        print-color-adjust: exact; /* Firefox */
+        margin: 0; /* Reduce margin to decrease space between idCards */
+        flex-direction: column;
+    }
+
+    /* Specific styles for smallFront */
+    #largeFront {
+        background-image: url('/images/idBg2.png'); /* Set background image for small front */
+        background-size: cover; /* Ensure it covers the div */
+        height: calc(900px * 0.6);
+        width: calc(800px * 0.85);
+            transform: scale(0.8); /* Scale down the idCard */
+            transform-origin: top left; /* Ensure scaling is from the top left */
+            margin: 0; /* Reduce margin to decrease space between idCards */
+            display: flex;
+    }
+
+    /* Specific styles for smallBack */
+    #largeBack {
+        background-image: url('/images/idBg4.png'); /* Set background image for small back */
+        background-size: cover; /* Ensure it covers the div */
+        height: calc(900px * 0.6);
+        width: calc(800px * 0.85);
+            transform: scale(0.8); /* Scale down the idCard */
+            transform-origin: top left; /* Ensure scaling is from the top left */
+            margin: 0; /* Reduce margin to decrease space between idCards */
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="head-nav" style="margin-top: 0;">
+                <div class="nav" style="justify-content: flex-start; width: 100%;">               
+                    <div class="pnav" style="align-items: flex-start;">
+                    <a href="#" id="userIcon" class="userIcon" style=" border: 1px solid gray; border-radius: 50%; box-shadow: none;">
+                        <img src="<%= employeeData.userPhoto ? employeeData.userPhoto : '/images/profileX.jpg' %>" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                    </a>
+                    </div>
+                    <div class="snav">
+                        <% if (employeeData) { %>
+                            <% if (employeeData.role === 'Admin') { %>
+                                <p2>Welcome Admin <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else if (employeeData.role === 'HR') { %>
+                                <p2>Welcome HR <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else { %>
+                                <p2>Welcome <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } %>
+                        <% } else { %>
+                            <p2>Welcome Guest!</p2>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="side-nav">
+                <a href="/admin/notif" class="notif" style="position: relative; border: 0.5px solid lightgray;">
+                <i class="fas fa-bell"></i>
+                <% if (pendingCount > 0) { %>
+                    <span id="badge" class="badge"><%= pendingCount %></span>
+                <% } %>
+                Notification
+            </a>
+                    <a href="/admin/ann" class="ann" style="position: relative; border: 0.5px solid lightgray;">
+                        <i class="fas fa-circle-exclamation"></i> Announcements
+                    </a>
+                    <hr>
+                    <a href="/admin/das" class="das"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                    <a href="/admin/emp" class="em"><i class="fas fa-user-tie"></i> Employees</a>
+                    <a href="/admin/dig" class="dig"><i class="fas fa-address-card"></i> My Digital ID</a>
+                    <a href="/admin/dir" class="dir"><i class="fa-solid fa-address-book"></i> Directory</a>
+                    <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>
+            
+
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+        </div>
+        
+
+        
+        <div class="main-frame">
+            
+            
+            <div class="sub">
+                <div class="ctrl left">
+                </div>
+                <div class="ctrl mid">
+                        <a href="javascript:void(0);" class="pbtn" onclick="printIdCards()">
+                            <i class="fa-solid fa-print"></i> Small ID
+                        </a>
+                        |
+                        <a href="javascript:void(0);" class="pbtn" onclick="printIdCards('large')">
+                            <i class="fa-solid fa-print"></i> Large ID
+                        </a>
+                        |
+                        <a href="javascript:void(0);" class="pbtn" onclick="printIdCards('all')">
+                            <i class="fa-solid fa-print"></i> Both ID
+                        </a>
+                </div>
+                <div class="ctrl right">
+                    <i style="color: inherit;" class="fa-solid fa-chevron-right"></i>
+                        Done printing? Let's update the request status
+                        &nbsp;
+                        <a href="javascript:void(0);" class="pbtn" style="cursor: pointer;" onclick="window.history.back();">
+                            Go Back
+                        </a>
+                        
+                </div>
+            </div>
+
+            <div class="main-content">               
+                <center><ph>Employee's Digital ID</ph></center>
+                <br>
+
+                <div class="rowCard viewS">
+                    <div class="idCard small" id="smallFront">
+                        <span id="brH" style="margin: 65px;"></span>
+                        <div class="uphCard2">
+                        <img src="<%= employee.userPhoto ? employee.userPhoto : '/images/profileX.jpg' %>"  style="border-radius: 5px;" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                        </div>
+                        <br><br><br>
+                        <p1><%= employee.firstName %> <%= employee.middleName ? employee.middleName.charAt(0) + '.' : '' %> <%= employee.lastName %> <%= employee.extName %></p1>
+                        <p3><%= employee.userId %></p3>
+                        <span style="margin: 5px;"></span>
+                        <p1><%= employee.position %></p1>
+                        <hr>
+                        <p3><%= employee.office %></p3>
+                    </div>
+                    <div class="idCard small" id="smallBack">
+                        <img src="<%= employee.signature ? employee.signature : '/images/sig1.jpg' %>" style="max-width: 90px; height: 40px;">
+                        <hr>
+                        <p3>signature</p3>
+                        <span style="margin: 5px;"></span>
+                        <div style="display: flex; align-items: flex-start; flex-direction: column; width: 100%;">
+                            <p3 style="text-align: left;">Address: <%= employee.streetName %> <%= employee.brgyName %>, Science City of Munoz</p3>
+                            <p3>Contact Number: <%= employee.phone %></p3>
+                            <p3>Birthday: <%= new Date(employee.birthday).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' }) %></p3>
+                            <p3>Blood Type: <%= employee.bloodType %></p3>
+                            <p3>TIN: <%= employee.tinId%></p3>
+                            <p3>GSIS No.: <%= employee.gsisId %></p3>
+                            <p3>PAG-IBIG No.:<%= employee.pagIbig%></p3>
+                            <p3>SSS No.:<%= employee.sssId %></p3>
+                            <p3>Philhealth No.:<%= employee.philhealth %></p3>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; justify-content: center; flex-direction: column; width: 100%;">
+                            <p style="background-color: black; color: white; width: 100%; padding: 5px 0;">PERSON TO NOTIFY IN CASE OF EMERGENCY:</p>
+                            <p3>Name: <%= employee.eName %></p3>
+                            <p3>Contact No.: <%= employee.ePhone %></p3>
+                            <p3 style="text-align: left;">Address: <%= employee.address %></p3>
+                        </div>
+                        <img src="<%= qrCodeUrl %>" style="max-width: 110px; height: auto; border-radius: 10px;" id="qrImg" onerror="this.onerror=null; this.src='/images/defaultQrCode.jpg';">
+                        <br>
+                    </div>
+                </div>
+                <br>
+                <br>
+
+
+                <div class="rowCard viewL">
+                    <div class="idCard large" id="largeFront">
+                        <span style="margin: 60px;"></span>
+                        <div class="uphCard" style="height: 200px; width: 200px;">
+                            <img src="<%= employee.userPhoto ? employee.userPhoto : '/images/profileX.jpg' %>"  style="border-radius: 50%;" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                            </div>
+                            <br>
+                            <p1 style="color: orangered; font-size: 32px;"><%= employee.nickName %></p1>
+                            <p1><%= employee.firstName %> <%= employee.middleName ? employee.middleName.charAt(0) + '.' : '' %> <%= employee.lastName %> <%= employee.extName %></p1>
+                            <p3><%= employee.userId %></p3>
+                            <span style="margin: 5px;"></span>
+                            <p1><%= employee.position %></p1>
+                            <hr>
+                            <p3><%= employee.office %></p3>
+                    </div>
+                    <div class="idCard large" id="largeBack">
+                        <img src="<%= employee.signature ? employee.signature : '/images/sig1.jpg' %>" style="max-width: 90px; height: 40px;">
+                        <hr>
+                        <p3>signature</p3>
+                        <span style="margin: 2px;"></span>
+                        <div style="display: flex; align-items: flex-start; flex-direction: column; width: 100%;">
+                            <p3 style="text-align: left;">Address: <%= employee.streetName %> <%= employee.brgyName %>, Science City of Munoz</p3>
+                            <p3>Contact Number: <%= employee.phone %></p3>
+                            <p3>Birthday: <%= new Date(employee.birthday).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' }) %></p3>
+                            <p3>Blood Type: <%= employee.bloodType %></p3>
+                            <p3>TIN: <%= employee.tinId%></p3>
+                            <p3>GSIS No.: <%= employee.gsisId %></p3>
+                            <p3>PAG-IBIG No.:<%= employee.pagIbig%></p3>
+                            <p3>SSS No.:<%= employee.sssId %></p3>
+                            <p3>Philhealth No.:<%= employee.philhealth %></p3>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; justify-content: center; flex-direction: column; width: 100%;">
+                            <p style="background-color: black; color: white; width: 100%; padding: 5px 0;">PERSON TO NOTIFY IN CASE OF EMERGENCY:</p>
+                            <p3>Name: <%= employee.eName %></p3>
+                            <p3>Contact No.: <%= employee.ePhone %></p3>
+                            <p3 style="text-align: left;">Address: <%= employee.address %></p3>
+                        </div>
+                        <img src="<%= qrCodeUrl %>" style="max-width: 110px; height: auto; border-radius: 10px;" id="qrImg">
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+    <script>
+        // Generic function to print selected sections
+        function printIdCards(type) {
+            let sections;
+            
+            // Select sections based on the type
+            if (type === 'all') {
+                // Select both .viewS and .viewL
+                sections = document.querySelectorAll('.rowCard.viewS, .rowCard.viewL');
+            } else if (type === 'large') {
+                // Select only .viewL
+                sections = document.querySelectorAll('.rowCard.viewL');
+            } else {
+                // Select only .viewS (default behavior)
+                sections = document.querySelectorAll('.rowCard.viewS');
+            }
+    
+            let printContent = '';
+    
+            // Loop through the selected sections and accumulate their outerHTML
+            sections.forEach(section => {
+                printContent += section.outerHTML;
+            });
+    
+            const originalContent = document.body.innerHTML;
+    
+            // Temporarily replace body content with selected print sections
+            document.body.innerHTML = printContent;
+    
+            // Open print dialog
+            window.print();
+    
+            // Restore original content after printing
+            setTimeout(() => {
+                document.body.innerHTML = originalContent;
+                window.location.reload(); // Reload the page to reset (optional)
+            }, 0);
+        }
+    </script>
+    
+    
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+<script>
+    function goBack() {
+        const referrer = document.referrer;  // Gets the previous page URL
+        if (referrer) {
+            window.location.href = referrer;  // Redirect to the previous page
+        } else {
+            window.history.back();  // Fallback to history if no referrer exists
+        }
+    }
+</script>
+    
+<script src="/script.js"></script>     
+</body>
+</html>

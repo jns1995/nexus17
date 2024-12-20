@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>NEXUS ID</title>
+    <style>
+        .main-content {
+            overflow: auto;
+            background-color: transparent;
+            padding: 1% 34% 0 5%;
+            background-color: rgb(244, 245, 246);
+            gap: 25px;
+            justify-content: flex-start;
+            align-items: flex-start;
+        
+        }
+        .row.btn {
+            position: absolute;
+            top: 1px;
+            right: 15px;
+            gap: 0;
+        }
+        .row.btn a, .row.btn button {
+            padding: 8px 8px;
+            color: white;
+            text-align: center;
+            border-radius: 20px;
+            font-size: 10px;
+            text-decoration: none;
+            flex: 1 ;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+        }
+        .row.btn button {
+            background-color: transparent;
+        }
+        .row.btn a:hover, .row.btn button:hover {
+            background-color: #f8f8f8;
+        }
+        .row.btn a:hover i {
+            color: #395830;
+        }
+        .row.btn a i {
+            font-size: 18px;
+        }
+        .row.btn a:hover {
+            transform: scale(1.02);
+        }
+        .row.btn .dbtn {
+            background-color: orangered;
+        }
+        .row.btn .ebtn {
+            background-color: transparent;
+        }
+        .row.btn .nbtn {
+            background-color: #2e7d32;
+        }
+        .row.btn .cbtn {
+            background-color: #888;
+        }
+        .sub.top {
+            height: auto;
+            width: 30%;
+            padding: 20px 10px;
+            position: absolute;
+            top: 12%;
+            right: 30px;
+            align-items: flex-start;
+            justify-content: flex-end;
+            background-color: rgb(255, 255, 255);
+            flex-direction: column;
+            flex: none;
+            box-shadow: 0 2px 6px rgb(161, 160, 160);
+            border-radius: 18px;
+        }
+        .sub.bottom {
+            height: 100%;
+            width: 65%;
+            padding: 10px 50px;
+            position: absolute;
+            top: 0;
+            align-items: flex-start;
+            justify-content: center;
+            background-color: #ecefec;
+            flex-direction: column;
+            flex: none;
+            box-shadow: 0 2px 6px rgb(161, 160, 160);
+            border-radius: 18px;
+            z-index: 100;
+        }
+        .sub.mid {
+            height: 90%;
+            width: 98%;
+            padding: 10px 250px;
+            position: absolute;
+            bottom: 10px;
+            right: 18px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            background-color: #ecefec;
+            flex-direction: column;
+            box-shadow: 0 2px 6px rgb(161, 160, 160);
+            border-radius: 18px;
+            z-index: 100;
+        }
+        .main-frame {
+            position: relative;
+        }
+        .ctrl.left {
+            width: 100%;
+            padding: 0;
+        }
+        .sub input, .sub textarea {
+            width: 100%;
+            flex: 1;
+        }
+        label {
+            padding-left: 5px;
+        }
+        form.AnnForm {
+            width: 100%;
+            gap: 20px;
+        }
+        .annCov {
+            width: 50%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+        }
+        .annCov img {
+            width: auto;
+            height: 100%;
+            max-width: 95%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="head-nav" style="margin-top: 0;">
+                <div class="nav" style="justify-content: flex-start; width: 100%;">               
+                    <div class="pnav" style="align-items: flex-start;">
+                    <a href="#" id="userIcon" class="userIcon" style=" border: 1px solid gray; border-radius: 50%; box-shadow: none;">
+                        <img src="<%= employeeData.userPhoto ? employeeData.userPhoto : '/images/profileX.jpg' %>" onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture">
+                    </a>
+                    </div>
+                    <div class="snav">
+                        <% if (employeeData) { %>
+                            <% if (employeeData.role === 'Admin') { %>
+                                <p2>Welcome Admin <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else if (employeeData.role === 'HR') { %>
+                                <p2>Welcome HR <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } else { %>
+                                <p2>Welcome <br>
+                                    <fh style="font-size: 20px;"><%= employeeData.firstName %></fh>
+                                </p2>
+                            <% } %>
+                        <% } else { %>
+                            <p2>Welcome Guest!</p2>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="side-nav">
+                <a href="/admin/notif" class="notif" style="position: relative; border: 0.5px solid lightgray;">
+                <i class="fas fa-bell"></i>
+                <% if (pendingCount > 0) { %>
+                    <span id="badge" class="badge"><%= pendingCount %></span>
+                <% } %>
+                Notification
+            </a>
+                    <a href="/admin/ann" class="active" style="position: relative; border: 0.5px solid lightgray;">
+                        <i class="fas fa-circle-exclamation"></i> Announcements
+                    </a>
+                    <hr>
+                    <a href="/admin/das" class="das"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                    <a href="/admin/emp" class="emp"><i class="fas fa-user-tie"></i> Employees</a>
+                    <a href="/admin/dig" class="dig"><i class="fas fa-address-card"></i> My Digital ID</a>
+                    <a href="/admin/dir" class="dir"><i class="fa-solid fa-address-book"></i> Directory</a>
+                    <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>
+            
+
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+        </div>
+
+        <div class="main-frame">
+            <div class="sub">
+                <div class="ctrl left">
+                    <a href="#" class="pbtn" onclick="goBack()"><i class="fa-solid fa-chevron-left"></i>Cancel</a>
+                </div>
+                <div class="ctrl right">
+                </div>
+            </div>
+
+            <div class="sub mid" id="edit-modal" style="display: flex">
+                <fh>Modify Announcement</fh>
+                <br>
+                <form id="editAnnouncementForm" class="AnnForm" action="/admin/updateAnn/<%= announcement.id %>" method="POST"   enctype="multipart/form-data">
+                    <div class="ctrl left" style="flex-direction: column; align-items: flex-start;">
+                        <label for="xtitle">Title</label>
+                        <input style="width: 100%;" type="text" id="xtitle" name="title" placeholder="e.g. New Implementation, Schedule, Notice" required value="<%= announcement.title %>">
+                    </div>
+                    <br>
+                    <div class="ctrl left">
+                        <label for="xIssuedBy">From</label>
+                        <input type="text" id="xIssuedBy" name="annFrom" placeholder="Issued by: e.g. The City Mayor" required value="<%= announcement.annFrom %>">
+                        <label for="xIssuedBy">To</label>
+                        <input type="text" id="xAddressedTo" name="annto" placeholder="Addressed to: e.g. To All Employees" required value="<%= announcement.annto %>">
+                    </div>
+                    <br>
+                    <div class="ctrl left" style="flex-direction: column; align-items: flex-start;">
+                        <label for="txtDesc">Description</label>
+                        <div style="max-height: 700px; height: auto; display: flex; width: 100%;">
+                            <textarea rows="14" cols="150" placeholder="Indicate the full details of your announcement here ..." id="txtDesc" name="description" required><%= announcement.description %></textarea>
+                            <div class="annCov" style="flex-direction: column;">
+                                <img src="<%= announcement.coverPhoto || '/images/sig1.jpg' %>" alt="Cover Photo">
+                                <br>
+                                <input type="file" name="coverPhoto">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="ctrl left" style="justify-content: flex-end;">
+                        <button type="submit" class="sbtn" style="cursor: pointer;">
+                            <i class="fa-solid fa-circle-check"></i>
+                            UPDATE
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            
+
+            <div class="main-content">
+
+                </div>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const annCards = Array.from(document.querySelectorAll('.annCard'));
+    
+        // Function to format and label dates
+        function formatDate(date) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+    
+            if (date.toDateString() === today.toDateString()) {
+                return `<span style="color: green; font-weight: 600;">NEW! TODAY -</span> ${date.toLocaleDateString('en-US', options)}`;
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return `<span style="color: green;">Yesterday -</span> ${date.toLocaleDateString('en-US', options)}`;
+            }   
+            return date.toLocaleDateString('en-US', options);
+        }
+    
+        // Sort announcements by date
+        function sortAnnouncements() {
+            annCards.sort((a, b) => {
+                const dateA = new Date(a.querySelector('.myDate').textContent);
+                const dateB = new Date(b.querySelector('.myDate').textContent);
+                return dateB - dateA; // Sort from latest to oldest
+            });
+    
+            // Append sorted cards to the main content
+            const mainContent = document.querySelector('.main-content');
+            mainContent.innerHTML = ''; // Clear existing content
+            annCards.forEach(card => {
+                mainContent.appendChild(card);
+            });
+    
+            // Format the dates for display
+            annCards.forEach(card => {
+                const annDateText = card.querySelector('.myDate').textContent;
+                const annDate = new Date(annDateText);
+                card.querySelector('.myDate').innerHTML = formatDate(annDate); // Use innerHTML to render HTML
+            });
+        }
+    
+        // Initial sort
+        sortAnnouncements();
+    
+        // Filter function (with sorting)
+        document.getElementById('univ').addEventListener('keyup', filterAnnouncements);
+        document.getElementById('startDate').addEventListener('change', filterAnnouncements);
+        document.getElementById('endDate').addEventListener('change', filterAnnouncements);
+    
+        function filterAnnouncements() {
+            const filter = document.getElementById('univ').value.toLowerCase();
+            const startDateInput = document.getElementById('startDate').value;
+            const endDateInput = document.getElementById('endDate').value;
+    
+            const startDate = new Date(startDateInput);
+            const endDate = new Date(endDateInput);
+            
+            annCards.forEach(card => {
+                const title = card.querySelector('.annTitle').textContent.toLowerCase();
+                const description = card.querySelector('.annDescription').textContent.toLowerCase();
+                const annDateText = card.querySelector('.myDate').textContent;
+                const annDate = new Date(annDateText.replace(/[^a-zA-Z0-9, ]/g, '')); // Clean the date text
+    
+                const matchesFilter = title.includes(filter) || description.includes(filter);
+                const isWithinDateRange = (isNaN(startDate) || annDate >= startDate) && (isNaN(endDate) || annDate <= endDate);
+    
+                if (matchesFilter && isWithinDateRange) {
+                    card.style.display = ""; // Show card
+                } else {
+                    card.style.display = "none"; // Hide card
+                }
+            });
+        }
+    });
+    
+</script> 
+<script>
+    // MAKE NEW ANNOUCEMENT //
+const notificationDiv = document.querySelector('.sub.bottom');
+
+document.getElementById('newAnnIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+
+    if (notificationDiv.style.display === 'none' || notificationDiv.style.display === '') {
+        notificationDiv.style.display = 'flex'; // Show the div
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        notificationDiv.style.display = 'none'; // Hide the div
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Close the div when clicking the close icon
+document.getElementById('xIcon').addEventListener('click', function(event) {
+    notificationDiv.style.display = 'none'; // Hide the div
+    document.getElementById('newAnnIcon').classList.remove('user-icon-active'); // Remove active class
+});
+
+// Optional: Close the div when clicking outside
+document.addEventListener('click', (event) => {
+    if (!event.target.closest('#newAnnIcon') && !notificationDiv.contains(event.target)) {
+        notificationDiv.style.display = 'none'; // Hide the div
+        document.getElementById('newAnnIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+<script>
+    document.getElementById('notifIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const notifNav = document.querySelector('.notif-nav');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 5;
+
+    if (notifNav.style.display === 'none' || notifNav.style.display === '') {
+        notifNav.style.display = 'flex'; // Show the notif-nav
+        notifNav.style.right = '8px'; // Align to the right edge
+        notifNav.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('notif-icon-active'); // Add active class
+    } else {
+        notifNav.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('notif-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const notifNav = document.querySelector('.notif-nav');
+    if (!event.target.closest('#notifIcon') && !notifNav.contains(event.target)) {
+        notifNav.style.display = 'none'; // Hide the info-nav
+        document.getElementById('notifIcon').classList.remove('notif-icon-active'); // Remove active class
+    }
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.editAnn');
+    const editModal = document.getElementById('edit-modal');
+    const closeModal = document.getElementById('closeIcon');
+    const editAnnouncementForm = document.getElementById('editAnnouncementForm');
+    
+    const openModal = (announcementId) => {
+        fetch(`/announcements/${announcementId}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('xtitle').value = data.title;
+                document.getElementById('xIssuedBy').value = data.issuedBy;
+                document.getElementById('xAddressedTo').value = data.addressedTo;
+                document.getElementById('txtDesc').value = data.description;
+                editModal.style.display = 'flex'; // Show the modal
+            })
+            .catch(error => console.error('Error fetching announcement:', error));
+    };
+
+    const closeModalFunc = () => {
+        editModal.style.display = 'none'; // Hide the modal
+    };
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            const announcementId = button.getAttribute('data-id'); // Get the announcement ID
+            openModal(announcementId); // Open the modal with the specific announcement
+        });
+    });
+
+    closeModal.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default link behavior
+        closeModalFunc(); // Close the modal
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === editModal) {
+            closeModalFunc(); // Close modal when clicking outside
+        }
+    });
+
+    editAnnouncementForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent default form submission
+        const formData = new FormData(editAnnouncementForm);
+        const announcementId = editButtons[0].getAttribute('data-id'); // Get the ID from the first button
+
+        fetch(`/announcements/${announcementId}`, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                closeModalFunc(); // Close the modal
+                window.location.reload(); // Refresh the page
+            } else {
+                console.error('Error updating announcement:', response.statusText);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+</body>
+</html>

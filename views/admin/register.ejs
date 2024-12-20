@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <title>NEXUS ID</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(149, 182, 119, 0.9);
+        }
+        .createCard {
+            width: 60%;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form class="createCard" id="createCard" action="/admin/createAccount" method="POST">
+        <div class="formClose" id="formClose"><i class="fa-solid fa-xmark"></i></div>
+        <div class="formCard left">
+            <div class="row header">
+                <fh>Unlock Your Account</fh>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <p>Please fill out all the necessary information.</p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <h2>Complete Name</h2>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label>First Name</label>
+                    <input type="text" name="firstName" required placeholder="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label>Middle Name</label>
+                    <input type="text" name="middleName" placeholder="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label>Last Name</label>
+                    <input type="text" name="lastName" required placeholder="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="field tiny">
+                    <label>Extension</label>
+                    <input type="text" name="extName" placeholder="e.g. Jr., II">
+                </div>
+                <div class="field short">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="">--Select Gender--</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <br><hr><br>
+            <div class="row">
+                <h2>Contact Info</h2>
+            </div>
+            <div class="row">
+                <div class="field long">
+                    <label>Email Address</label>
+                    <input type="email" name="email" required placeholder="e.g. juan.delacruz@gmail.com">
+                </div>
+                <div class="field short">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" required placeholder="">
+                </div>
+            </div>
+        </div>
+
+        <div class="formCard right">
+            <div class="row">
+                <h2>Job Description</h2>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label>Position</label>
+                    <input type="text" name="position" required placeholder="">
+                </div>
+                <div class="field short">
+                    <label>Type</label>
+                    <select name="type" required>
+                        <option value="">--Select Type--</option>
+                        <option value="Elected">Elected</option>
+                        <option value="Casual">Casual</option>
+                        <option value="Co-Term">Co-Term</option>
+                        <option value="Job Order">Job Order</option>
+                        <option value="Permanent">Permanent</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label>Office</label>
+                    <select name="office" required>
+                        <option value="" disabled selected>--Select Office--</option>
+                        <option value="city administrator’s office">City Administrator’s Office</option>
+                        <option value="city accounting office">City Accounting Office</option>
+                        <option value="city assessor’s office">City Assessor’s Office</option>
+                        <option value="city budget office">City Budget Office</option>
+                        <option value="city business permit and licensing office">City Business Permit and Licensing Office</option>
+                        <option value="city civil registrar’s office">City Civil Registrar’s Office</option>
+                        <option value="city cooperative development office and allied services">City Cooperative Development Office and Allied Services</option>
+                        <option value="city disaster risk reduction and management office">City Disaster Risk Reduction and Management Office</option>
+                        <option value="city economic enterprise management office">City Economic Enterprise Management Office</option>
+                        <option value="city engineering office">City Engineering Office</option>
+                        <option value="city environment and natural resources office">City Environment and Natural Resources Office</option>
+                        <option value="city general services office">City General Services Office</option>
+                        <option value="city health office">City Health Office</option>
+                        <option value="city human resource management office">City Human Resource Management Office</option>
+                        <option value="city information office">City Information Office</option>
+                        <option value="city information and communications technology office">City Information and Communications Technology Office</option>
+                        <option value="city library">City Library</option>
+                        <option value="city motor pool">City Motor Pool</option>
+                        <option value="city planning and development office">City Planning and Development Office</option>
+                        <option value="city population office">City Population Office</option>
+                        <option value="city public employment service office">City Public Employment Service Office</option>
+                        <option value="city public order and safety office">City Public Order and Safety Office</option>
+                        <option value="city social welfare and development office">City Social Welfare and Development Office</option>
+                        <option value="city tourism office">City Tourism Office</option>
+                        <option value="city traffic management unit">City Traffic Management Unit</option>
+                        <option value="city treasurer’s office">City Treasurer’s Office</option>
+                        <option value="city veterinary / city agriculture office">City Veterinary / City Agriculture Office</option>
+                        <option value="community affairs office">Community Affairs Office</option>
+                        <option value="local economic investment and promotion office">Local Economic Investment and Promotion Office</option>
+                        <option value="local youth development office">Local Youth Development Office</option>
+                        <option value="ospital ng lungsod agham ng muñoz (oslam)">Ospital ng Lungsod Agham ng Muñoz (OsLAM)</option>
+                        <option value="sangguniang panlungsod">Sangguniang Panlungsod</option>
+                        <option value="sp secretary">SP Secretary</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <div class="row">
+                <input type="checkbox" id="consent" name="consent" required>
+                <label for="consent">
+                    I consent to the processing of my personal data in accordance with the 
+                    <a href="privacy-policy.html" target="_blank">Privacy Policy</a>. 
+                    I understand that I will receive an email containing my username and password once my information has been validated by the admin.
+                </label>
+            </div>
+            <br><br>
+            <br>
+            <div class="row ctrl">
+                <button type="reset" id="reset" class="s">Clear Form</button>
+                <button type="submit" id="submit">Register</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    document.getElementById('formClose').addEventListener('click', function() {
+        window.location.href = '/admin/welcome'; // Redirect to welcome.html
+    });
+</script>
+</body>
+</html>

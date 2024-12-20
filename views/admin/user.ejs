@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>NEXUS ID</title>
+    <style>
+.main-frame {
+    padding: 30px 10px;
+    position: relative;
+}
+.container {
+    background: linear-gradient(to top, #4a7b58, #6b9f7d, #4a7b58);
+
+}
+.main-content {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    gap: 15px;
+    background-color: transparent;
+}
+.card {
+    padding: 0;
+    height: 100%; /* Ensure cards take full height */
+    margin: 0;
+    gap: 8px;
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
+    justify-content: center;
+    width: 100%;
+}
+.card.left {
+    width: 30%;
+}
+.card.mid {
+    width: 40%;
+}
+.card.right {
+    width: 30%;
+}
+.mCard {
+    background-color: white;
+    border-radius: 14px;
+    flex: 1; /* Makes each mCard take equal width */
+    box-shadow: 0 2px 4px rgba(138, 138, 138, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: auto;
+    flex-direction: column;
+    padding: 20px;
+}
+.title {
+    width: 50%;
+}
+.snav {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 5px 0;
+}
+.txtPlate {
+    padding: 12px 8px;
+    border-radius: 22px;
+    font-size: 12px;
+    background-color: transparent;
+}
+.uphCard {
+    height: 120px;
+    width: 120px;
+}
+.uphCard img {
+    width: 100%;
+    height: 100%;
+    border-radius: 80px;
+}
+p.txtInfo {
+    font-size: 14px;
+    margin: 0;
+    width: 100%;
+    padding: 12px 0;
+}
+p.txtInfo i {
+    font-size: 10px;
+}
+p.headInfo {
+    font-size: 16px;
+    font-weight: 400;
+    color: green;
+}
+p.name, p.name i {
+    font-size: 20px;
+    font-weight: 600;
+    color: green;
+}
+.headInfo i {
+    color: green;
+}
+p.txtInfo.green {
+    color: green;
+}
+.txtInfo a {
+    text-decoration: none;
+    color: white;
+    background-color: orangered;
+    padding: 8px 12px;
+    border-radius: 18px;
+    transition: all 0.6s ease; /* Smooth transition */
+}
+a.resetPass:hover {
+    transform: scale(1.08);
+}
+.deac {
+    position: absolute;
+    width: 78%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: 0;
+    z-index: 200;
+    background-color: rgb(244, 246, 245);
+}
+.resetPass-card {
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 6px 8px rgba(138, 138, 138, 0.6);
+    padding: 20px 40px;
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: space-between;
+    flex-direction: column;
+}
+.deac .row .field, .deac .row .field p2 {
+    justify-content: center;
+    align-items: center;
+}
+.nav {
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+.sub i {
+    font-size: inherit;
+    color: inherit;
+}
+.sub a {
+    text-align: left;
+}
+form p {
+    color: white;
+}
+.field input, .field i {
+    color: white;
+}
+.card.left .txtInfo {
+    color: gray;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="main-frame">
+            
+            <div class="sub">
+                <div class="ctrl left" style="align-items: flex-start; flex-direction: row; justify-content: space-between;">
+                    <a href="#" class="pbtn" id="goBackButton"><i class="fa-solid fa-chevron-left"></i> Go Back</a>
+                </div>
+                <div class="ctrl mid">
+                    <fh style="color: white;">User Profile Management</fh>
+                </div>
+                <div class="ctrl right">
+                    <a href="/admin/welcome" class="sbtn" style="background-color: #223125;">
+                        <i style="font-size: inherit;" class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                    </a>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="card left">
+                        <div class="mCard">
+                            <div class="uphCard" style="position: relative;">
+                                <img src="<%= user.userPhoto ? user.userPhoto : '/images/profileX.jpg' %>" 
+                                onerror="this.onerror=null; this.src='/images/profileX.jpg';" alt="Profile Picture" 
+                                style="border: 1px solid lightgray;">
+                            <a href="/admin/userPhoto" title="Upload Photo" style="border-radius: 50%; border: 1px solid gray; text-decoration: none; position: absolute; bottom: 5px; right: 5px; display: flex; justify-content: center; align-items: center; padding: 5px;">
+                                <i class="fa fa-camera" style="font-size: 25px; margin-left: 0; text-align: center; opacity: 0.8; color: gray; cursor: pointer;"></i>
+                            </a>
+                            </div>
+        
+                            <p class="name" style="font-size: xx-large;"><%= user.firstName %>  <i class="bi bi-patch-check-fill"></i></p>
+                            <p class="name"><%= user.middleName %> <%= user.lastName %> <%= user.extName %></p>
+                            <br>
+                            
+                            
+                        <div class="sub" style="background-color: transparent; border-radius: 12px; width: 100%;">
+                            <div class="ctrl right" style="justify-content: space-between; gap: 10px;">
+                                <a href="/admin/editUser/<%= user.id %>" class="pbtn">
+                                    <i class="fa-solid fa-pen-to-square"></i>Update Profile
+                                </a>            
+                                <a class="pbtn" id="resetPasswordBtn" style="cursor: pointer;"> <i class="fa-solid fa-lock"></i> Reset Password</a>
+                            </div>
+                        </div>
+                            <hr>
+                            <p class="txtInfo"><i class="fas fa-user-lock"></i> Username: <%= user.username %></p>
+                            <p class="txtInfo">
+                                <i class="fas fa-lock"></i> Password: 
+                                <span id="password" class="password">******</span> 
+                                <a href="javascript:void(0)" id="togglePassword" onclick="togglePassword()" style="background-color: transparent; color: green;">
+                                    show
+                                </a>
+                              </p>
+                            <hr>
+                            <p class="txtInfo"><i class="fa-solid fa-id-card"></i> <%= user.userId %></p> <!-- Assuming an employee ID -->
+                            <p class="txtInfo"><i class="fa-solid fa-building"></i> <%= user.office %></p> <!-- Assuming an office field -->
+                            <p class="txtInfo"><i class="fa-solid fa-user-tie"></i> <%= user.position %></p> <!-- Assuming a position field -->
+                            <p class="txtInfo"><i class="fa-solid fa-briefcase"></i> <%= user.type %></p> <!-- Assuming a status field -->
+                            <br>
+                        </div>
+                </div>
+                <div class="card mid">
+                    <div class="mCard">
+                        <p class="headInfo">Personal Details</p>
+                        <hr>
+                        <p class="txtInfo"><i class="fa-solid fa-home"></i> <%= user.streetName %> <%= user.brgyName %>, Science City of Munoz</p>
+                        <p class="txtInfo"><i class="fa-solid fa-phone"></i> <%= user.phone %></p>
+                        <p class="txtInfo"><i class="fa-solid fa-envelope"></i> <%= user.email %></p>
+                        
+                        <p class="txtInfo"><i class="fa-solid fa-person"></i> <%= user.gender %></p>
+                        <p class="txtInfo">
+                            <i class="fa-solid fa-cake-candles"></i> 
+                            <%= new Date(user.birthday).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }) %>
+                        </p>
+                        <p class="txtInfo"><i class="fa-solid fa-star"></i> <%= user.nickName %></p>
+                        <p class="txtInfo"><i class="fa-solid fa-droplet"></i> Blood Type: <%= user.bloodType %></p>
+                        <hr>
+                        <p class="txtInfo"><i class="fas fa-shield-alt icon"></i> SSS: <%= user.sssId %></p>
+                        <p class="txtInfo"><i class="fas fa-id-card icon"></i> TIN: <%= user.tinId %></p>
+                        <p class="txtInfo"><i class="fas fa-briefcase icon"></i> GSIS: <%= user.gsisId %></p>
+                        <p class="txtInfo"><i class="fas fa-home icon"></i> Pag-IBIG: <%= user.pagIbig %></p>
+                        <p class="txtInfo"><i class="fas fa-medkit icon"></i> PhilHealth: <%= user.philhealth %></p>
+                    </div>
+                </div>
+                <div class="card right" style="justify-content: flex-start;">
+                        <div class="mCard" style="height: auto; max-height: 250px;">
+                            <p class="headInfo">Emergency Contact</p>
+                            <hr>
+                            <p class="txtInfo"><i class="fa-solid fa-user"></i> <%= user.eName %></p>
+                            <p class="txtInfo"><i class="fa-solid fa-home icon"></i> <%= user.eAddress %></p>
+                            <p class="txtInfo"><i class="fa-solid fa-phone"></i> <%= user.ePhone %></p>
+                        </div>
+                        <br>
+                        <div class="mCard" style="background-color: #2f4433; display: none;"  id="resetPasswordForm">
+                            <form action="/admin/resetUserPassword/<%= user.id %>" method="POST" onsubmit="return validatePassword()" style="width: 100%;">
+                                <p class="headInfo" style="color: white;">Reset Password</p>
+                                <br>
+                                <div class="row">
+                                    <div class="field" style="position: relative">
+                                        <p>New Password</p>
+                                        <input type="password" name="newPassword" id="new-password" required>
+                                        <span class="toggle-password" onclick="togglePassword('new-password')"><i class="fa-solid fa-eye"></i></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="field" style="position: relative">
+                                        <p>Confirm Password</p>
+                                        <input type="password" name="confirmPassword" id="confirm-password" required>
+                                        <span class="toggle-password" onclick="togglePassword('confirm-password')"><i class="fa-solid fa-eye"></i></span>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row ctrl">
+                                    <button type="reset" id="reset" class="s">Clear</button>
+                                    <button type="submit" id="submit">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mCard" id="infoCard" style="color: white; background: radial-gradient(circle, #4a7b58, #44624a);">
+                            <p1 style="text-align: center; font-weight: 500; width: 100%;">
+                                Keep your information<br>Up-To-Date!
+                            </p1>
+                            <br><hr><br>
+                            <p2 style="text-align: center; font-weight: normal;">
+                                NOTE: Personal Details (First Name, Middle Name, Last Name)
+                                 and Employment Information (ID Number, Designated Office, Position, Employment Type) cannot be changed without approval from HR.
+                                <br><br>To send request, go to My Digital ID Page.
+                            </p2>
+                        </div>
+                        
+                        
+                        <script>
+                            function validatePassword() {
+                                const newPassword = document.getElementById('new-password').value;
+                                const confirmPassword = document.getElementById('confirm-password').value;
+                        
+                                if (newPassword !== confirmPassword) {
+                                    alert("Passwords do not match. Please try again.");
+                                    return false; // Prevent form submission
+                                }
+                        
+                                // Confirmation dialog
+                                const confirmReset = confirm('Are you sure you want to reset the password?');
+                                return confirmReset; // Only proceed if the user confirms
+                            }
+                        
+                            function togglePassword(inputId) {
+                                const input = document.getElementById(inputId);
+                                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                                input.setAttribute('type', type);
+                            }
+                        </script>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the reset password button, form elements and form toggle text
+        const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const infoCard = document.getElementById('infoCard');
+    
+        // Function to toggle the visibility of the password reset form
+        resetPasswordBtn.addEventListener('click', function(event) {
+            // Prevent default anchor click behavior (optional)
+            event.preventDefault();
+    
+            // Toggle the visibility of the mCard (password reset form)
+            if (resetPasswordForm.style.display === "none" || resetPasswordForm.style.display === "") {
+                resetPasswordForm.style.display = "flex";  // Show form
+                resetPasswordBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Hide Reset Form';  // Change button text
+                infoCard.style.display = "none";
+            } else {
+                resetPasswordForm.style.display = "none";   // Hide form
+                resetPasswordBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Reset Password';  // Revert button text
+                infoCard.style.display = "flex";
+            }
+        });
+    
+        // Function to toggle the password visibility
+        function togglePassword(id) {
+            const passwordField = document.getElementById(id);
+            const toggleIcon = passwordField.nextElementSibling;
+    
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+            } else {
+                passwordField.type = "password";
+                toggleIcon.innerHTML = '<i class="fa-solid fa-eye"></i>';
+            }
+        }
+    </script>
+    
+    
+    <script>
+        document.getElementById('goBackButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default anchor click behavior
+            let userRole = '<%= user.role %>'; // Assuming you have access to user.role
+    
+            if (userRole === 'Admin' || userRole === 'HR') {
+                window.location.href = '/admin/das';
+            } else {
+                window.location.href = '/admin/dig';
+            }
+        });
+    </script>
+<script>
+    document.getElementById('userIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const userOption = document.querySelector('.userOption');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 9;
+
+    if (userOption.style.display === 'none' || userOption.style.display === '') {
+        userOption.style.display = 'flex'; // Show the notif-nav
+        userOption.style.left = '8px'; // Align to the right edge
+        userOption.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('user-icon-active'); // Add active class
+    } else {
+        userOption.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('user-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const userOption= document.querySelector('.userOption');
+    if (!event.target.closest('#userIcon') && !userOption.contains(event.target)) {
+        userOption.style.display = 'none'; // Hide the info-nav
+        document.getElementById('userIcon').classList.remove('user-icon-active'); // Remove active class
+    }
+});
+</script>
+
+    <script>
+        function togglePassword(inputId) {
+            const inputField = document.getElementById(inputId);
+            const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+            inputField.setAttribute('type', type);
+        }
+    </script>
+
+    <script>
+// para sa notif nav
+document.getElementById('notifIcon').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const notifNav = document.querySelector('.notif-nav');
+    const rect = this.getBoundingClientRect();
+    const distanceBelow = 5;
+
+    if (notifNav.style.display === 'none' || notifNav.style.display === '') {
+        notifNav.style.display = 'flex'; // Show the notif-nav
+        notifNav.style.right = '8px'; // Align to the right edge
+        notifNav.style.top = `${rect.bottom + distanceBelow}px`; // Position below the icon
+        this.classList.add('notif-icon-active'); // Add active class
+    } else {
+        notifNav.style.display = 'none'; // Hide the notif-nav
+        this.classList.remove('notif-icon-active'); // Remove active class
+    }
+});
+
+// Optional: Close the info-nav when clicking outside
+document.addEventListener('click', (event) => {
+    const notifNav = document.querySelector('.notif-nav');
+    if (!event.target.closest('#notifIcon') && !notifNav.contains(event.target)) {
+        notifNav.style.display = 'none'; // Hide the info-nav
+        document.getElementById('notifIcon').classList.remove('notif-icon-active'); // Remove active class
+    }
+});
+</script> 
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+<script>
+    function showResetFrame() {
+        document.querySelector('.resetPass-frame').style.display = 'flex';
+    }
+
+    function hideResetFrame() {
+        document.querySelector('.resetPass-frame').style.display = 'none';
+    }
+
+    function togglePassword(inputId) {
+        const inputField = document.getElementById(inputId);
+        const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+        inputField.setAttribute('type', type);
+    }
+</script>
+<script>
+    function togglePassword() {
+  var passwordField = document.getElementById("password");
+  var toggleLink = document.getElementById("togglePassword");
+
+  // Check if the password is currently shown as dots
+  if (passwordField.innerText === "******") {
+    // Show the password as plain text
+    passwordField.innerText = "<%= user.password %>";
+    toggleLink.innerText = "hide";
+  } else {
+    // Hide the password as dots
+    passwordField.innerText = "******";
+    toggleLink.innerText = "show";
+  }
+}
+</script>
+<script src="script.js"></script>     
+</body>
+</html>

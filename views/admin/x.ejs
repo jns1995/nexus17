@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <title>NEXUS ADMIN</title>
+    <style>
+        .main-frame {
+            overflow: hidden;
+        }
+        .head-nav {
+            margin-bottom: 0;
+            margin-top: 15px;
+        }
+        .main-content {
+            overflow: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex: 1; /* Take remaining height */
+            gap: 30px;
+            flex-direction: row;
+            height: 400px;
+            padding: 0 5px 0 0;
+            margin-bottom: 10px;
+            background-color: transparent;
+            overflow: hidden;
+        }
+        .main-content.desc {
+            background-color: white;
+            margin: 0 10px 0 0;
+            border: 0.5px solid rgb(236, 235, 235);
+            flex: 1;
+            height: auto;
+            padding: 10px;
+            overflow: hidden;
+        }
+        .pframe {
+            flex: 3; /* 75% width */
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Match analysis-frame height */
+            border-radius: 18px;
+            padding: 10px 10px;
+            position: relative;
+            justify-content: flex-end;
+            align-items: center;
+            border: 0.5px solid rgb(197, 195, 1950, 0.3);
+            box-shadow: 0 0 10px rgba(162, 162, 162, 0.3);
+            max-height: 90%;
+        }
+
+        .sframe {
+            flex: 1; /* 25% width */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            height: 90%;
+            padding-right: 5px;
+        }
+
+        .stocks-frame, .delivery-frame {
+            flex: 1; /* Equal height rows */
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the start */
+            flex-direction: column;
+            position: relative;
+        }
+        .stocks-frame {
+            color: #253528;
+            box-shadow: 0 0 10px rgba(162, 162, 162, 0.3);
+        }
+        .delivery-frame {
+            box-shadow: 0 0 10px rgba(162, 162, 162, 0.3);
+            height: 150px; /* Set a maximum height for charts */
+            color: #476b40;
+        }
+        .stocks-frame i {
+            color:white;
+            font-size: 14px;
+        }
+        #myDonutChart {
+            max-height: 145px; /* Set a maximum height for charts */
+            z-index: 1;
+        }
+        #IdChart {
+            width: 100%;
+            max-height: 150px;
+        }
+        #myChart {
+            max-height: 300px;
+        }
+        .small-select {
+            appearance: none;
+            font-size: 14px;
+            padding: 5px 10px;
+            position: absolute;
+            right: 10px;
+            top: 13px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+        }
+        .divrow {
+            padding: 5px;
+            gap: 20px;
+            overflow: hidden;
+        }
+        .divcol {
+            border-radius: 26px;
+            color: white;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(162, 162, 162, 0.3);
+        }
+        .divcol:hover {
+            transform: scale(1.08);
+        }
+        .divcol i {
+            color: #364e3b;
+            font-size: 18px;
+            text-align: center;
+            margin-right: 5px;
+        }
+        .summary {
+            width: 100%;
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: auto;
+            overflow: hidden;
+        }
+        .titleCard a {
+            background-color: #bceace;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: normal;
+            font-size: 14px;
+            color: green;
+        }
+        
+        .ctrl.right a {
+            text-decoration: none;
+            padding: 10px;
+            color: black; /* Default link color */
+            border: 1px solid transparent;
+            border-radius: 18px;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: transparent;
+            margin: 0 2px;
+            width: 140px;
+        }
+        .ctrl.right a.active {
+            background-color: #4a7b58;
+            color: white; /* Active text color */
+        }
+        
+        .ctrl.right a.active i {
+            color: white; /* Active text color */
+        }
+        .ctrl.right a:hover {
+            background-color: #80ae90;
+            color: white; /* Hover text color */
+        }
+        .ctrl.right a:hover i {
+            color: white;
+        }
+        .ctrl a i {
+            color: black;
+        }
+        td {
+            font-size: 15px;
+        }
+        .tBrgy {
+            width: 85%;
+        }
+        .divcol ph {
+            font-size: 16px;
+            font-weight: 400;
+        }
+        .divcol p1 {
+            font-size: 20px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="userOption" style="display: none;">
+            <a href="/admin/user">Profile <i class="fa-solid fa-user"></i></a><hr>
+            <a href="/admin/welcome">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="notif-nav" style="display: none;">
+            <iframe class="notif-frame" src="/admin/notif" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+        <div class="info-nav" style="display: none;">
+            <iframe class="info-frame" src="/admin/hotline" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+
+        <div class="side-frame">
+            <div class="logo-nav">
+                <img src="/images/logo.png" alt="NEXUS ID Logo">
+                <p1>NEXUS ID</p1>
+            </div>
+            <div class="side-nav">
+                <a href="/admin/das" class="active"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+                <a href="/admin/ann" class="ann"><i class="fas fa-circle-exclamation"></i> Announcements</a>
+                <a href="/admin/emp" class="emp"><i class="fas fa-user-tie"></i> Employees</a>
+                <a href="/admin/dir" class="dir"><i class="fa-solid fa-address-book"></i> Directory</a>
+                <a href="/admin/frm" class="frm"><i class="fas fa-file-alt"></i> Forms</a>
+            </div>   
+        </div>
+
+
+        <div class="main-frame">
+            <div class="head-nav">
+                <div class="title">
+                    <ph>Dashboard</ph>
+                </div>
+                <div class="nav">
+                    <div class="snav">
+                        <a id="phoneIcon" href="#" class="pbtn"><i class="fas fa-phone"></i> Emergency Hotline</a>
+                        |
+                        <a href="" id="notifIcon" class=""><i class="fas fa-bell"></i><span id="badge" class="badge">30</span></a>
+                    </div>                    
+                    <div class="pnav">
+                    <a href="#" id="userIcon" class="userIcon"><img src="/images/profileX.jpg" alt="Profile Picture"></a>
+                    </div>
+                </div>
+            </div>
+<div style="overflow-y: scroll; gap: 10px;">
+
+            <div class="titleCard" style="margin-top: 10px;">Issued ID Summary |  <a>Total Issued ID : 89</a></div>                        
+            <div class="divrow">
+                <div class="divcol records" style="background-color: #6b9f7d;">
+                    <ph>Elected</ph>
+                    <p1>40 Issued</p1>
+                </div>
+                <div class="divcol issued" style="background-color: #4a7b58;">
+                    <ph>Co-Term</ph>
+                    <p1>160 Issued</p1>
+                </div>
+                <div class="divcol extra" style="background-color: #44624a;">
+                    <ph>Casual</ph>
+                    <p1>120 Issued</p1>
+                </div>
+                <div class="divcol pending" style="background-color: #3d5842;">
+                    <ph>Job Order</ph>
+                    <p1>27 Issued</p1>
+                </div>
+                <div class="divcol pending" style="background-color: #364e3b;">
+                    <ph>Permanent</ph>
+                    <p1>350 Issued</p1>
+                </div>
+            </div>
+
+            <div class="titleCard" style="margin-top: 10px;">Insights Overview | <a>Total Active Users : 120 </a></div>
+            <div class="main-content" style="align-items: flex-start;">
+                    <div class="pframe">
+                        <div>
+                            <p1 style="padding: 10px; position: absolute; left: 10px; top: 6px;">TRACKER
+                            </p1>
+                            <select id="filterInput" onchange="navigateToPage()" class="small-select">
+                            <option value="">Filter</option>
+                            <option value="">Today</option>
+                            <option value="">This Month</option>
+                            <option value="">This Year</option>
+                            <option value="">Up to date</option>
+                            </select></div>
+                            <canvas id="myChart" width="" height=""></canvas>
+                    </div>
+
+                    <div class="sframe">
+                        <div class="delivery-frame">
+                            <canvas id="myDonutChart" style="align-self: left;"></canvas>
+                        </div>
+                        <div class="stocks-frame">
+                            <canvas id="IdChart"></canvas>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="sub">
+                <div class="ctrl left">
+                    <div class="titleCard" style="margin-top: 10px;">Total Number of Employees</div>
+                </div>
+                <div class="ctrl right">
+                    <a href="#" class="ptab active" id="perOffice" onclick="showTable('tOffice', this)"><i class="fa-solid fa-briefcase"></i>Per Office</a>
+                    <a href="#" class="stab" id="perBarangay" onclick="showTable('tBrgy', this)"><i class="fas fa-home"></i>Per Barangay</a>
+                </div>
+            </div>
+
+            <div class="main-content desc">
+                    <div class="summary">
+                        <table class="tOffice" id="tOffice">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Office</th>
+                                    <th>Total Number</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% offices.forEach(office => { %>
+                                    <tr>
+                                        <td><%= office.office %></td>
+                                        <td><%= office.total %></td>
+                                        <td><%= office.percentage.toFixed(2) + '%' %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                        
+                        <table class="tBrgy" id="tBrgy" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Barangay</th>
+                                    <th>Total Number</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% barangays.forEach(barangay => { %>
+                                    <tr>
+                                        <td><%= barangay.brgyName %></td>
+                                        <td><%= barangay.total %></td>
+                                        <td><%= barangay.percentage.toFixed(2) + '%' %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                        <table class="tGender" id="tGender" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Gender</th>
+                                    <th>Total Number</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% genders.forEach(gender => { %>
+                                    <tr>
+                                        <td><%= gender.gender %></td>
+                                        <td><%= gender.total %></td>
+                                        <td><%= gender.percentage.toFixed(2) + '%' %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>                        
+                        
+                    </div>
+    </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateToPage() {
+            const selectElement = document.getElementById('filterInput');
+            const selectedValue = selectElement.value;
+    
+            if (selectedValue) {
+                // Redirect to the selected page
+                window.location.href = selectedValue;
+            }
+        }
+    </script>
+
+<script>
+    const ctx1 = document.getElementById('myDonutChart').getContext('2d');
+    
+    // Create gradient for Male
+    const gradientMale = ctx1.createLinearGradient(0, 0, 0, 400);
+    gradientMale.addColorStop(0, '#44624a'); // Darker start color
+    gradientMale.addColorStop(1, '#4a7b58'); // Lighter end color
+    
+    // Create gradient for Female
+    const gradientFemale = ctx1.createLinearGradient(0, 0, 0, 400);
+    gradientFemale.addColorStop(0, '#8ba888'); // Darker start color
+    gradientFemale.addColorStop(1, '#fce2a0'); // Lighter end color
+    
+    const myDonutChart = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+            labels: ['MALE', 'FEMALE'],
+            datasets: [{
+                data: [381, 678],
+                backgroundColor: [gradientMale, gradientFemale],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '55%',
+            plugins: {
+                tooltip: {
+                    enabled: true, // Enable tooltips
+                    callbacks: {
+                        label: (tooltipItem) => {
+                            const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                            const currentValue = tooltipItem.raw;
+                            const percentage = ((currentValue / total) * 100).toFixed(1);
+                            return `${tooltipItem.label}: ${currentValue}  •  (${percentage}%)`; // Display value and percentage
+                        }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom', // Position the legend on the right
+                    labels: {
+                        color: '#476b40',
+                        font: {
+                            size: 12,
+                            family: 'poppins'
+                        },
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            const labels = Chart.defaults.plugins.legend.labels;
+                            return data.labels.map((label, index) => {
+                                const value = data.datasets[0].data[index];
+                                const percentage = ((value / data.datasets[0].data.reduce((a, b) => a + b, 0)) * 100).toFixed(1);
+                                return {
+                                    text: `${label}: ${value}  •  ${percentage}%`,
+                                    fillStyle: data.datasets[0].backgroundColor[index],
+                                    strokeStyle: labels.strokeStyle,
+                                    lineWidth: labels.lineWidth,
+                                    hidden: false,
+                                    index: index,
+                                };
+                            });
+                        }
+                    }
+                },
+                datalabels: {
+                    color: 'white', // Color of the labels
+                    font: {
+                        size: 14
+                    },
+                    formatter: (value, context) => {
+                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
+                        return `${percentage}%`; // Display only the percentage
+                    },
+                    anchor: 'end', // Position of the label
+                    align: 'end' // Alignment of the label
+                }
+            }
+        }
+    });
+    
+    </script>
+
+<script>
+    // Bar chart data
+    const Line = document.getElementById('IdChart').getContext('2d');
+    const employmentTypes = ['Casual', 'Co-Term', 'Elected', 'Job-Order', 'Permanent'];
+
+    // Data arrays
+    const totalIssued = [60, 30, 87, 44, 25]; // Number of issued IDs
+    const totalEmployees = [100, 50, 98, 60, 80]; // Total number of employees for each type
+
+    // Function to determine background color based on highest value
+    const getBackgroundC = (data) => {
+        const maxValue = Math.max(...data);
+        return data.map(value => (value === maxValue ? '#d28c6c' : '#e9f5db')); // Change color for max value
+    };
+
+    const IdChart = new Chart(Line, {
+        type: 'bar',
+        data: {
+            labels: employmentTypes,
+            datasets: [
+                {
+                    label: 'Issued IDs',
+                    data: totalIssued,
+                    backgroundColor: '#44624a', // Static color for issued IDs
+                    borderWidth: 1,
+                    barThickness: 24,
+                    borderRadius: 0,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: 'Total Employees',
+                    data: totalEmployees,
+                    backgroundColor: '#8ba888', // Dynamic color for employees
+                    borderWidth: 1,
+                    barThickness: 24,
+                    borderRadius: 0,
+                    yAxisID: 'y2'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true, // Show the legend
+                    position: 'top', // Position the legend at the bottom
+                    labels: {
+                        color: '#253528', // Change legend text color for visibility
+                        font: {
+                            size: 12, // Increased font size for legend
+                            family: 'poppins', // Optional: change font family
+                        },
+                        paddingBottom: 5     // Add space between legend and chart
+                    }
+                }
+            },
+            scales: {
+                y1: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        display:false,
+                        color: '#253528', // Change y1 ticks color to white
+                        font: {
+                            size: 10, // Adjust size for visibility
+                            family: 'poppins' // Optional: change font family
+                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Issued IDs'
+                    }
+                },
+                y2: {
+                    beginAtZero: true,
+                    position: 'right',
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        display:false,
+                        color: '#253528', // Change y2 ticks color to white
+                        font: {
+                            size: 8, // Adjust size for visibility
+                            family: 'poppins' // Optional: change font family
+                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Total Employees'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#253528', // Change x ticks color to white
+                        font: {
+                            size: 7, // Font size for x-axis labels
+                            family: 'poppins', // Optional: change font family
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        },
+    });
+</script>
+
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    const myChart = new Chart(ctx, {
+        type: 'bar', // Bar chart
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: 'Elected',
+                    data: [120, 35, 50, 220, 85, 100, 150, 130, 170, 190, 20, 65], // Shuffled data
+                    backgroundColor: '#6b9f7d', // Bar color
+                },
+                {
+                    label: 'Co-term',
+                    data: [15, 200, 30, 70, 20, 90, 160, 140, 50, 180, 110, 160], // Shuffled data
+                    backgroundColor: '#4a7b58', // Bar color
+                },
+                {
+                    label: 'Casual',
+                    data: [90, 40, 70, 210, 230, 110, 250, 160, 190, 30, 55, 140], // Shuffled data
+                    backgroundColor: '#44624a', // Bar color
+                },
+                {
+                    label: 'Job-order',
+                    data: [10, 45, 150, 65, 20, 35, 85, 120, 105, 165, 180, 150], // Shuffled data
+                    backgroundColor: '#3d5842', // Bar color
+                },
+                {
+                    label: 'Permanent',
+                    data: [5, 240, 15, 70, 10, 30, 90, 150, 120, 180, 210, 50], // Shuffled data
+                    backgroundColor: '#364e3b', // Bar color
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'black',
+                        font: {
+                            size: 14,
+                            family: 'poppins'
+                        }
+                    },
+                    grid: {
+                        color: 'transparent'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black',
+                        font: {
+                            size: 16,
+                            family: 'poppins',
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            },
+            elements: {
+                bar: {
+                    borderWidth: 0, // Removed border color
+                    borderRadius: 0, // Optional: rounded corners
+                    barThickness: 35,
+                }
+            }
+        }
+    });
+</script>
+<script>
+    function showTable(tableId, element) {
+        // Hide both tables
+        document.getElementById('tOffice').style.display = 'none';
+        document.getElementById('tBrgy').style.display = 'none';
+        
+        // Show the selected table
+        document.getElementById(tableId).style.display = 'table';
+        
+        // Update active button
+        const tabs = document.querySelectorAll('.ctrl.right a');
+        tabs.forEach(tab => {
+            tab.classList.remove('active'); // Remove active class from all tabs
+        });
+        element.classList.add('active'); // Add active class to the clicked tab
+    }
+</script>
+<script src="/script.js"></script>
+</body>
+</html>
