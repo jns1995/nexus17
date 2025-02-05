@@ -1,0 +1,22 @@
+name: Unzip File
+
+on:
+  workflow_dispatch:  # Manually trigger the unzip action
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Unzip File
+        run: unzip BVRSRS v1.zip -d extracted/
+
+      - name: Commit and Push Extracted Files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git commit -m "Unzipped files"
+          git push origin main
