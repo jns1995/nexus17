@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRAR</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="../public/style.css">
+    <link rel="icon" href="../public/images/clogo.png">
+    <style>
+        .main {
+            align-items: start;
+            flex-direction: row;
+        }
+        form {
+            height: auto;
+            width: 35%;
+        }
+        fieldset {
+            width: 100%;
+            height: auto;
+            border: none;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: var(--lightgray);
+            position: relative;
+        }
+        fieldset .row {
+            margin-top: 10px;
+        }
+        .xmark {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        .xmark:hover {
+            background-color: transparent;
+            color: orangered;
+        }
+        .hidden {
+            display: none;
+        }
+        .reqSec {
+            width: 55%;
+            box-shadow: none;
+            border-radius: 10px;
+            padding: 0;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: start;
+        }
+        .reqCard {
+            height: auto;
+            width: 48%;
+            background-color: white;
+            padding: 20px;
+            box-shadow: none;
+            flex-direction: column;
+            justify-content: end;
+            align-items: start;
+            gap: 10px;
+        }
+        @media (max-width: 1024px) {
+                #webHead {
+                    display: none;
+                }
+                #mobileHead {
+                    display: flex;
+                }
+            body {
+                padding: 0;
+            }
+            .p10 {
+                font-size: 10px;
+            }
+            p.title {
+                font-size: 12px;
+            }
+            form {
+                width: 100%;
+                padding: 15px;
+                border-radius: 10px;
+            }
+            .field.medium {
+                width: 100%;
+            }
+            .field.large {
+                width: 100%;
+            }
+            #documentForm {
+                display: none;
+            }
+            .reqSec {
+                width: 100%;
+                border-radius: 0;
+                background-color: transparent;
+            }
+            .reqCard {
+                align-items: start;
+                width: 100%;
+            }
+            .pInfo i {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="headf" id="webHead">
+        <div class="ctrl left">
+            <a href="../views/home.html" class="nav">
+                <i class="fas fa-chevron-left"></i>
+                Previous
+            </a>
+        </div>
+        <div class="ctrl">
+        </div>
+        <div class="ctrl right">
+            <div class="searchBar">
+                <input type="search">
+                <i class="fas fa-search" style="color: var(--shade7);"></i>
+            </div>
+        </div>
+    </div>
+    <div class="headf hidden noPadding" style="height: 60px;" id="mobileHead">
+        <div class="ctrl left">
+            <a href="../views/home.html" class="nav mnav">
+                <i class="fas fa-chevron-left"></i>
+                Previous
+            </a>
+        </div>
+        <div class="ctrl right">
+            <div class="searchBar noPadding mSearch" style="height: 20px; min-height: 28px; border-radius: 8px;">
+                <input type="search" style="min-height: 28px;">
+                <i class="fas fa-search" style="color: var(--shade7);"></i>
+            </div>
+            <a href="../views/req.html" class="nav mnav pnav">
+                <i class="fas fa-file"></i>
+                Request
+            </a>
+        </div>
+    </div>
+    <div class="mainf">
+        <div class="main">
+            <div class="section reqSec" id="reqSec">
+
+                <div class="card reqCard">
+                    <a href="" class="nav fnav trNo" style="height: 40px; width: auto;">
+                        <i class="fas fa-receipt"></i>
+                        AU 01-3400
+                    </a>
+                    <span class="pInfo" style="display: flex; width: 100%; justify-content: space-between;">
+                        <p class="p10 str500">
+                            <i class="fas fa-calendar"></i>
+                            Date Requested
+                        </p>
+                        <p class="p10 str500">
+                            Jan 30, 2025
+                        </p>
+                    </span>
+                    <span class="pInfo" style="display: flex; width: 100%; justify-content: space-between;">
+                        <p class="p10 str500">
+                            <i class="fas fa-user"></i>
+                            Accounting
+                        </p>
+                        <p class="p10 str500" id="Status">
+                            Pending
+                        </p>
+                    </span>
+                    <a href="../views/viewReq.html" class="nav fnav viewBtn" style="height: 40px; max-width: 100%; background-color: var(--shade1); color: white;">
+                        <i class="fas fa-eye"></i>
+                        Details
+                    </a>
+                </div>
+                <div class="card reqCard">
+                    <a href="" class="nav fnav trNo" style="height: 40px; width: auto;">
+                        <i class="fas fa-receipt"></i>
+                        AU 01-3400
+                    </a>
+                    <span class="pInfo" style="display: flex; width: 100%; justify-content: space-between;">
+                        <p class="p10 str500">
+                            <i class="fas fa-calendar"></i>
+                            Date Requested
+                        </p>
+                        <p class="p10 str500">
+                            Jan 30, 2025
+                        </p>
+                    </span>
+                    <span class="pInfo" style="display: flex; width: 100%; justify-content: space-between;">
+                        <p class="p10 str500">
+                            <i class="fas fa-user"></i>
+                            Accounting
+                        </p>
+                        <p class="p10 str500" id="Status">
+                            For Pickup
+                        </p>
+                    </span>
+                    <a href="../views/viewReq.html" class="nav fnav viewBtn" style="height: 40px; max-width: 100%; background-color: var(--shade1); color: white;">
+                        <i class="fas fa-eye"></i>
+                        Details
+                    </a>
+                </div>
+                <div class="card reqCard">
+                    <a href="" class="nav fnav trNo" style="height: 40px; width: auto;">
+                        <i class="fas fa-receipt"></i>
+                        AU 01-3400
+                    </a>
+                    <span class="pInfo" style="display: flex; width: 100%; justify-content: space-between;">
+                        <p class="p10 str500">
+                            <i class="fas fa-calendar"></i>
+                            Date Requested
+                        </p>
+                        <p class="p10 str500">
+                            Jan 30, 2025
+                        </p>
+                    </span>
+                    <span class="pInfo" style="display: flex; width: 100%; justify-content: space-between;">
+                        <p class="p10 str500">
+                            <i class="fas fa-user"></i>
+                            Accounting
+                        </p>
+                        <p class="p10 str500" id="Status">
+                            Claimed
+                        </p>
+                    </span>
+                    <a href="../views/viewReq.html" class="nav fnav viewBtn" style="height: 40px; max-width: 100%; background-color: var(--shade1); color: white;">
+                        <i class="fas fa-eye"></i>
+                        Details
+                    </a>
+                </div>
+
+            </div>
+            <form id="documentForm">
+                <div class="row head" style="justify-content: center;">
+                    <p class="title green">REQUEST DOCUMENT</p>
+                </div>
+                <hr>
+                <div id="fieldsetsContainer" class="col gap20">
+                    <fieldset>
+                        <button class="nav cnav xmark" type="button" onclick="removeFieldset(this)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="row">
+                            <div class="field">
+                                <label>Type of Document</label>
+                                <div class="selectBar">
+                                    <select class="document-type" onchange="handleDocumentTypeChange(this)">
+                                        <option value="">Select</option>
+                                        <option value="Certificate of Enrollment">Certificate of Enrollment</option>
+                                        <option value="Certificate of Grades">Certificate of Grades</option>
+                                        <option value="Certificate of Graduation">Certificate of Graduation</option>
+                                        <option value="Diploma">Diploma</option>
+                                        <option value="Form 137">Form 137</option>
+                                        <option value="GWA">GWA</option>
+                                        <option value="MA Curriculum">MA Curriculum</option>
+                                        <option value="Medium of Instruction">Medium of Instruction</option>
+                                        <option value="School Description">School Description</option>
+                                        <option value="Transcript of Record">Transcript of Record</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field additional-options hidden">
+                                <label>Options:</label>
+                                <div class="selectBar">
+                                    <select class="document-options" onchange="handleOptionChange(this)">
+                                        <option value="">Select Option</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field upload hidden">
+                                <label>Upload Image:</label>
+                                <input type="file">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field">
+                                <label>No. Copies</label>
+                                <input type="number">
+                            </div>
+                            <div class="field">
+                                <label>Amount</label>
+                                <input type="number" step="0.01" min="0" id="docPrice" placeholder="0.00" disabled style="text-align: right;">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row" style="width: 100%; justify-content: end;">
+                    <button class="nav pnav" type="button" onclick="addFieldset()">
+                        <i class="fas fa-plus"></i> Additional
+                    </button>
+                </div>
+                <br>
+                <div class="card note">
+                    TAKE NOTE: Please review all the details carefully before submitting your request. Ensure that all selections and information are correct, as changes may not be allowed after submission.
+                </div>
+                <br>
+                <div class="row">
+                    <div class="field btn">
+                        <a type="" href="reqSuccess.html" class="nav fnav pnav">
+                            Submit
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<script>function addFieldset() {
+    const container = document.getElementById("fieldsetsContainer");
+    const fieldset = document.createElement("fieldset");
+    fieldset.innerHTML = `
+                        <button class="nav cnav xmark" type="button" onclick="removeFieldset(this)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="row">
+                            <div class="field">
+                                <label>Type of Document</label>
+                                <div class="selectBar">
+                                    <select class="document-type" onchange="handleDocumentTypeChange(this)">
+                                        <option value="">Select</option>
+                                        <option value="Certificate of Enrollment">Certificate of Enrollment</option>
+                                        <option value="Certificate of Grades">Certificate of Grades</option>
+                                        <option value="Certificate of Graduation">Certificate of Graduation</option>
+                                        <option value="Diploma">Diploma</option>
+                                        <option value="Form 137">Form 137</option>
+                                        <option value="GWA">GWA</option>
+                                        <option value="MA Curriculum">MA Curriculum</option>
+                                        <option value="Medium of Instruction">Medium of Instruction</option>
+                                        <option value="School Description">School Description</option>
+                                        <option value="Transcript of Record">Transcript of Record</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field additional-options hidden">
+                                <label>Options:</label>
+                                <div class="selectBar">
+                                    <select class="document-options" onchange="handleOptionChange(this)">
+                                        <option value="">Select Option</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field upload hidden">
+                                <label>Upload Image:</label>
+                                <input type="file">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="field">
+                                <label>No. Copies</label>
+                                <input type="number">
+                            </div>
+                            <div class="field">
+                                <label>Amount</label>
+                                <input type="number" step="0.01" min="0" id="docPrice" placeholder="0.00" disabled style="text-align: right;">
+                            </div>
+                        </div>
+    `;
+    container.appendChild(fieldset);
+}
+
+function removeFieldset(button) {
+    button.closest("fieldset").remove();
+}
+
+function handleDocumentTypeChange(select) {
+    const fieldset = select.closest("fieldset");
+    const optionsSelect = fieldset.querySelector(".document-options");
+    const optionsDiv = fieldset.querySelector(".additional-options");
+    const uploadDiv = fieldset.querySelector(".upload");
+    
+    optionsSelect.innerHTML = "";
+    optionsDiv.classList.remove("hidden");
+    uploadDiv.classList.add("hidden");
+    
+    if (select.value === "Transcript of Record") {
+        optionsSelect.innerHTML += `<option value="Board Exam">Board Exam</option>`;
+        optionsSelect.innerHTML += `<option value="Reference" selected>Reference</option>`;
+        optionsSelect.innerHTML += `<option value="School Copy">School Copy</option>`;
+    } else if (select.value === "Form 137") {
+        optionsSelect.innerHTML += `<option value="Reference" selected>Reference</option>`;
+        optionsSelect.innerHTML += `<option value="School Copy">School Copy</option>`;
+    } else if (select.value !== "") {
+        optionsSelect.innerHTML += `<option value="Reference" selected>Reference</option>`;
+    } else {
+        optionsDiv.classList.add("hidden");
+    }
+}
+
+function handleOptionChange(select) {
+    const uploadDiv = select.closest("fieldset").querySelector(".upload");
+    uploadDiv.classList.toggle("hidden", select.value !== "School Copy");
+}
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".reqCard").forEach(card => {
+            let statusElement = card.querySelector("#Status");
+            if (statusElement) {
+                let statusText = statusElement.textContent.trim();
+                if (statusText === "For Pickup" || statusText === "Claimed") {
+                    let viewBtn = card.querySelector(".viewBtn");
+                    let trNo = card.querySelector(".trNo");
+
+                    // Change .viewBtn styles
+                    if (viewBtn) {
+                        viewBtn.style.backgroundColor = "white";
+                        viewBtn.style.color = "black";
+                    }
+
+                    // Change .trNo styles
+                    if (trNo) {
+                        trNo.style.color = "black";
+                    }
+
+                    // Change .reqCard styles
+                    card.style.backgroundColor = "transparent";
+                    card.style.border = "0.5px solid gray";
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
